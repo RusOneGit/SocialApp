@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">SocialActivity</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="registration">Registration</string>
+    <string name="back">Back</string>
+    <string name="name">Name</string>
+    <string name="camera">Camera</string>
+    <string name="confirm_password">Confirm</string>
+    <string name="password_empty">password can not be empty</string>
+    <string name="content_test1">Слушайте, а как вы относитесь к тому, чтобы собраться большой компанией и поиграть в настолки? У меня есть несколько клевых игр, можем устроить вечер настолок! Пишите в лс или звоните</string>
+</resources>
