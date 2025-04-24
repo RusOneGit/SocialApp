@@ -25,12 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import rus.one.app.components.PassWordState
+import rus.one.app.activity.state.PassWordState
 import rus.one.app.R
-import rus.one.app.components.ButtonLogin
-import rus.one.app.components.LoginField
-import rus.one.app.components.PasswordInputField
-import rus.one.app.components.TopBar
+import rus.one.app.components.button.ButtonLogin
+import rus.one.app.components.field.LoginField
+import rus.one.app.components.field.PasswordInputField
+import rus.one.app.components.bar.TopBar
 
 
 class AuthorizeActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package rus.one.app.components
+package rus.one.app.components.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

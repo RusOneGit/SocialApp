@@ -1,4 +1,4 @@
-package rus.one.app.components
+package rus.one.app.components.field
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

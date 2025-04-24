@@ -22,6 +22,6 @@ data class User(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-val user = User(R.drawable.ic_account, "Elena", "lenka", 22, true, job = mutableListOf(Jobs("Microsoft", "Manager",
+val user = User(R.drawable.img, "Elena", "lenka", 22, true, job = mutableListOf(Jobs("Microsoft", "Manager",
     period = Period(  Date(2020, 3, 1),
         Date(2024, 4, 7)))))

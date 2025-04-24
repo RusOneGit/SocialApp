@@ -1,4 +1,4 @@
-package rus.one.app.components
+package rus.one.app.components.bar
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import rus.one.app.components.button.BackButton
+import rus.one.app.components.button.ShareButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

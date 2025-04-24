@@ -1,4 +1,4 @@
-package rus.one.app.components
+package rus.one.app.components.button
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -12,15 +12,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import rus.one.app.R
 
+
 @Composable
-fun BackButton(onBackClick: () -> Unit) {
+fun ShareButton(onShareClick: () -> Unit){
     Icon(
-        painter = painterResource(R.drawable.ic_back),
-        contentDescription = stringResource(R.string.back),
-        tint = Color.DarkGray,
+        painter =  painterResource(R.drawable.ic_share),
+        contentDescription = stringResource(R.string.share),
+        tint =  Color(0xFF000000),
         modifier = Modifier
             .padding(8.dp)
             .size(32.dp)
-            .clickable(onClick = onBackClick)
+            .clickable {onShareClick}
+
     )
 }

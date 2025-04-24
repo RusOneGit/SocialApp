@@ -15,5 +15,5 @@ import java.time.format.DateTimeFormatter
 fun PostDetailsDate(date: LocalDateTime){
     val formattedDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yy HH:mm"))
 
-    Text(text =  formattedDate, modifier = Modifier.align(Alignment.Start))
+
 }

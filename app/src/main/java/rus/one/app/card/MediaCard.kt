@@ -2,10 +2,12 @@ package rus.one.app.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import rus.one.app.profile.Media
 
 @Composable
@@ -21,7 +23,7 @@ fun MediaContent(media: Media?) {
             Image(
                 painter = painterResource(media.url),
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth() // Задайте нужные размеры
+                modifier = Modifier.padding(16.dp).fillMaxWidth() // Задайте нужные размеры
             )
         }
 
@@ -32,7 +34,6 @@ fun MediaContent(media: Media?) {
 
         null -> {
             // Обработка случая, когда медиа отсутствует
-            Text(text = "Нет медиа")
         }
     }
 }

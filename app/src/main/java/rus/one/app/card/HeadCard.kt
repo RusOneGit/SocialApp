@@ -46,11 +46,11 @@ fun HeadCard(authorIcon: Int, author: String, date: LocalDateTime) {
             modifier = Modifier.weight(1f) // Занимает все доступное пространство
         ) {
             Text(modifier = Modifier.padding(4.dp),
-                text = author, color = Color(0xff1D1B20), fontWeight = FontWeight(500), fontSize =  16.sp
+                text = author, color = Color(0xff1D1B20), fontWeight = FontWeight(500), fontSize =  16.sp, letterSpacing = 0.15.sp, lineHeight = 24.sp
 
             )
             Text( modifier = Modifier.padding(4.dp),
-                text = formattedDate, color = Color(0xff1D1B20), fontWeight = FontWeight(400), fontSize = 14.sp
+                text = formattedDate, color = Color(0xff1D1B20), fontWeight = FontWeight(400), fontSize = 14.sp, letterSpacing = 0.25.sp, lineHeight = 20.sp
             )
         }
 

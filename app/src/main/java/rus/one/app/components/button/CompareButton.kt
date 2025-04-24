@@ -1,4 +1,4 @@
-package rus.one.app.components
+package rus.one.app.components.button
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
