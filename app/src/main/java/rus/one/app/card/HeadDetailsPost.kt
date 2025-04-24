@@ -1,11 +1,9 @@
-package rus.one.app.posts
+package rus.one.app.card
 
-import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,20 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import rus.one.app.R
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HeadCardPost(authorIcon: Int, author: String, date: LocalDateTime) {
-
-    val formattedDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yy HH:mm"))
-
+fun HeadDetailsPost(authorIcon: Int, author: String, job: String?) {
 
     Row(
         modifier = Modifier
@@ -40,7 +30,8 @@ fun HeadCardPost(authorIcon: Int, author: String, date: LocalDateTime) {
     ) {
         Icon(
             modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp).size(40.dp), // Отступ справа от иконки
+                .padding(start = 8.dp, end = 8.dp)
+                .size(40.dp), // Отступ справа от иконки
             painter = painterResource(authorIcon),
             contentDescription = ""
         )
@@ -48,19 +39,23 @@ fun HeadCardPost(authorIcon: Int, author: String, date: LocalDateTime) {
         Column(
             modifier = Modifier.weight(1f) // Занимает все доступное пространство
         ) {
-            Text(modifier = Modifier.padding(4.dp),
-                text = author, color = Color(0xff1D1B20), fontWeight = FontWeight(500), fontSize =  16.sp
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = author,
+                color = Color(0xff1D1B20),
+                fontWeight = FontWeight(500),
+                fontSize = 16.sp
 
             )
-            Text( modifier = Modifier.padding(4.dp),
-                text = formattedDate, color = Color(0xff1D1B20), fontWeight = FontWeight(400), fontSize = 14.sp
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = if(job == null) "" else job,
+                color = Color(0xff1D1B20),
+                fontWeight = FontWeight(400),
+                fontSize = 14.sp
             )
         }
 
-        Icon(
-            modifier = Modifier.size(24.dp), // Устанавливаем размер иконки
-            painter = painterResource(R.drawable.ic_more_vert), tint = Color(0xFF79747E),
-            contentDescription = ""
-        )
     }
 }
+

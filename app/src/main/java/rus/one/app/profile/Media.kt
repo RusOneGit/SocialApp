@@ -1,4 +1,4 @@
-package rus.one.app.posts
+package rus.one.app.profile
 
 sealed class Media {
     data class Link(val url: String) : Media()

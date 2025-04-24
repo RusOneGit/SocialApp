@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TopBar(
     title: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onShareClick: (() -> Unit)? = null
 ) {
     TopAppBar(
         title = {
@@ -26,6 +27,11 @@ fun TopBar(
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFEF7FF)),
         navigationIcon = {
             BackButton(onBackClick = onBackClick)
+        },
+        actions = {
+            onShareClick?.let {
+                ShareButton(onShareClick = it)
+            }
         }
     )
 }

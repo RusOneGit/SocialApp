@@ -1,4 +1,4 @@
-package rus.one.app.events
+package rus.one.app.card
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,8 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import rus.one.app.posts.ContentCard
-import rus.one.app.posts.HeadCardPost
+import rus.one.app.events.Event
+import rus.one.app.events.InfoEvent
+import rus.one.app.events.event
 import rus.one.app.profile.User
 import rus.one.app.profile.user
 
@@ -29,7 +30,7 @@ fun CardEvent(user: User, event: Event) {
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFEF7FF)),
         border = BorderStroke(1.dp, color = Color(0xFFCAC4D0))
     ) {
-        HeadCardPost(user.avatar, event.author, event.publicationDate)
+        HeadCard(user.avatar, event.author, event.publicationDate)
         InfoEvent(event.eventType, event.eventDate)
         ContentCard(event.content)
 
