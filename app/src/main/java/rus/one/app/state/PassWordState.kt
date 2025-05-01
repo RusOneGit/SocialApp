@@ -1,4 +1,4 @@
-package rus.one.app.activity.state
+package rus.one.app.state
 
 import androidx.compose.ui.text.input.TextFieldValue
 

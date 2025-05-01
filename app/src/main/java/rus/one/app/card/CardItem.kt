@@ -16,14 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import rus.one.app.common.Likeable
+import rus.one.app.events.Event
+import rus.one.app.events.InfoEvent
 import rus.one.app.posts.Post
 import rus.one.app.posts.post
-import rus.one.app.profile.User
-import rus.one.app.profile.user
+import rus.one.app.viewmodel.ViewModelCard
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CardPost(post: Post, user: User) {
+fun CardItem(viewModel: ViewModelCard, item: Likeable) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -33,29 +36,28 @@ fun CardPost(post: Post, user: User) {
         border = BorderStroke(1.dp, color = Color(0xFFCAC4D0))
     ) {
         HeadCard(
-            authorIcon = user.avatar,
-            author = user.name,
-            date = post.date
+            authorIcon = item.author.avatar, author = item.author.name, date = item.date
         )
-        ContentCard(content = post.content)
-        StatPost(likesCount = post.likesCount)
+        if (item is Event) {
+            InfoEvent(
+                item.eventType, item.eventDate
+            )
+        }
+        ContentCard(content = item.content)
+        StatPost(viewModel, item !is Post)
     }
 }
 
-
-@Composable
-fun MediaCard() {
-
-}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun PreviewPost() {
+    val viewModel = ViewModelCard()
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ) { CardPost(post, user) }
+    ) { CardItem(viewModel, post) }
 
 
 }

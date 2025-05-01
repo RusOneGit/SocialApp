@@ -1,7 +1,6 @@
 package rus.one.app.components.button
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -9,24 +8,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import rus.one.app.R
 
 
 @Composable
-fun ShareButton(modifier: Modifier = Modifier, color: Color, onShareClick: () -> Unit) {
-
-    Row(
+fun ProfileButton(onClick: () -> Unit) {
+    Icon( painter = painterResource(R.drawable.ic_account),
+        stringResource(R.string.profile),
+        tint =  Color(0xFF000000),
         modifier = Modifier
             .padding(8.dp)
-            .clickable(onClick = { onShareClick })
-    ) {
-        Icon(  modifier = modifier,
-            tint = color,
-            painter = painterResource(R.drawable.ic_share),
-            contentDescription = null
-        )
-
-    }
-
+            .size(32.dp)
+            .clickable { onClick }
+    )
 }

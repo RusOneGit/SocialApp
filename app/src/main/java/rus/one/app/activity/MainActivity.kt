@@ -1,104 +1,89 @@
 package rus.one.app.activity
 
-import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import rus.one.app.R
+import rus.one.app.card.CardItem
+import rus.one.app.components.bar.BottomBar
+import rus.one.app.components.button.ProfileButton
+import rus.one.app.events.event
+import rus.one.app.posts.post
+import rus.one.app.viewmodel.ViewModelCard
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by viewModels<ViewModelCard>()
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainScreen()
-
-
+            MainScreen(viewModel)
         }
     }
-
-    @Preview
-    @Composable
-    fun MainScreen() {
-
-        val context = LocalContext.current
-
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(), verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-
-            Icon(
-                painterResource(R.drawable.ic_account),
-                contentDescription = "Account",
-                modifier = Modifier
-                    .size(120.dp)
-            )
-
-            Button(
-                onClick = {
-                    val intent = Intent(context, RegisterActivity::class.java)
-                    context.startActivity(intent)
-                },
-                Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFE6E0E9),
-                    contentColor = Color.DarkGray
-                )
-            ) {
-                Text(stringResource(R.string.registration))
-            }
-
-            Button(
-                onClick = {
-                    val intent = Intent(context, AuthorizeActivity::class.java)
-                    context.startActivity(intent)
-                },
-                Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
-            ) {
-                Text(stringResource(R.string.login))
-            }
-        }
-
-    }
-
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun MainScreen(viewModel: ViewModelCard) {
 
+    val selectedItemPosition = remember { mutableStateOf(0) }
 
+    Scaffold(floatingActionButton = {
+        FloatingActionButton(onClick = {}) {
+            Icon(
+                painter = painterResource(R.drawable.ic_add),
+                contentDescription = stringResource(R.string.add)
+            )
+        }
+    }, topBar = {
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFEF7FF)),
+            title = { Text(stringResource(R.string.App_name)) },
+            actions = { ProfileButton(onClick = {}) })
+    }, bottomBar = {
+        BottomBar(selectedItemPosition)
+    }) { paddingValues ->  // добавляем параметр padding
+        // используем padding при создании содержимого
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            when (selectedItemPosition.value) {
+                0 -> repeat(3) { item { CardItem(viewModel, post)  }} // Контент для Posts
+                1 -> repeat(3) { item { CardItem(viewModel, event)  }} // Контент для Events
+                2 -> {
+                } // Контент для Users
+            }
 
+        }
 
-
-
-
-
-
+    }
+}
 

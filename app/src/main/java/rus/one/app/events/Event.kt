@@ -2,24 +2,42 @@ package rus.one.app.events
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import rus.one.app.R
+import rus.one.app.common.Likeable
 import rus.one.app.profile.Media
+import rus.one.app.profile.User
+import rus.one.app.profile.user
 import java.time.LocalDateTime
 
 data class Event(
-    val eventID: Int,
-    val author: String,
-    val authorID: Int,
-    val publicationDate: LocalDateTime,
+    override val id: Int,
+    override val author: User,
+    override val content: String,
+    override val date: LocalDateTime,
+    override val media: Media? = null,
+    override val likesCount: Int = 0,
+    override val likers: MutableList<User>? = null,
+
     val eventType: EventType,
     val eventDate: LocalDateTime,
-    val content: String,
-    val media: Media? = null,
-    val likesCount: Int? = null
-    )
+    val mentionedCount: Int = 0,
+    val speakers: MutableList<User>? = null,
+    val participants: MutableList<User>? = null,
+) : Likeable
 
-val content =
+enum class EventType {
+    Online,
+    Offline
+}
+
+const val content =
     "Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании. https://m2.material.io/components/cards"
 @RequiresApi(Build.VERSION_CODES.O)
-val event = Event(1, "Elena", 2, LocalDateTime.now(),EventType.Offline, LocalDateTime.now(), content, Media.Photo(
-    R.drawable.ic_launcher_background))
+val event = Event(
+    id = 1,
+    author = user,
+    content = content,
+    date = LocalDateTime.now(),
+    eventDate = LocalDateTime.now(),
+    eventType = EventType.Offline
+)
+

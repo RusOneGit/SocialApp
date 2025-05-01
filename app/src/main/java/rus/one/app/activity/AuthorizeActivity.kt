@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import rus.one.app.activity.state.PassWordState
+import rus.one.app.state.PassWordState
 import rus.one.app.R
 import rus.one.app.components.button.ButtonLogin
 import rus.one.app.components.field.LoginField

@@ -1,10 +1,10 @@
 package rus.one.app.events
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +17,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun InfoEvent(type: EventType, evenDateTime: LocalDateTime){
     val formattedDate = evenDateTime.format(DateTimeFormatter.ofPattern("dd.MM.yy HH:mm"))
@@ -29,6 +30,7 @@ fun InfoEvent(type: EventType, evenDateTime: LocalDateTime){
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun PreviewInfo(){
