@@ -1,20 +1,20 @@
 [versions]
 agp = "8.9.2"
 converterGson = "2.11.0"
-dagger = "2.49"
+dagger = "2.56.1"
 kotlin = "2.1.20"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.7"
+lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
-composeBom = "2025.04.01"
+composeBom = "2025.05.00"
 appcompat = "1.7.0"
 loggingInterceptor = "4.12.0"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
-ui = "1.8.0"
+ui = "1.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0" // this version matches your Kotlin version
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.20" // this version matches your Kotlin version
     id ("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
@@ -92,5 +92,8 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.ui)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.dagger.compiler)
 
 }

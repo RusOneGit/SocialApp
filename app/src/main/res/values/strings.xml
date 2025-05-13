@@ -18,4 +18,5 @@
     <string name="App_name">SocialActivity</string>
     <string name="profile">Profile</string>
     <string name="post_details">Post_Details</string>
+    <string name="newPost">New Post</string>
 </resources>

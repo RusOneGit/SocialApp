@@ -7,35 +7,41 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import rus.one.app.R
 import rus.one.app.card.CardItem
 import rus.one.app.components.bar.BottomBar
 import rus.one.app.components.button.ProfileButton
-import rus.one.app.events.event
+import rus.one.app.posts.Post
 import rus.one.app.posts.post
+import rus.one.app.profile.user
 import rus.one.app.viewmodel.ViewModelCard
+import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModels<ViewModelCard>()
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +57,14 @@ class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(viewModel: ViewModelCard) {
+    val message = remember{mutableStateOf("")}
+
+    val postsState = viewModel.posts.collectAsState(initial = emptyList())
+    val posts = postsState.value
+
+    val eventsState = viewModel.events.collectAsState(initial = emptyList())
+    val events = eventsState.value
+    // Предположим, что у вас есть события
 
     val selectedItemPosition = remember { mutableStateOf(0) }
 
@@ -75,15 +89,24 @@ fun MainScreen(viewModel: ViewModelCard) {
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
+
             when (selectedItemPosition.value) {
-                0 -> repeat(3) { item { CardItem(viewModel, post)  }} // Контент для Posts
-                1 -> repeat(3) { item { CardItem(viewModel, event)  }} // Контент для Events
+                0 -> items(posts) { post ->
+                    CardItem(viewModel, post) // Отображение постов
+                }
+
+                1 -> items(events) { event ->
+                    CardItem(viewModel, event) // Отображение событий
+                }
                 2 -> {
-                } // Контент для Users
+                    // Контент для пользователей
+                }
             }
 
         }
 
     }
+
 }
+
 

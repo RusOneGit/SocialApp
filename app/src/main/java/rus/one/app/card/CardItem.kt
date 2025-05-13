@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import rus.one.app.common.Likeable
+import rus.one.app.common.Item
 import rus.one.app.events.Event
 import rus.one.app.events.InfoEvent
 import rus.one.app.posts.Post
@@ -26,11 +26,12 @@ import rus.one.app.viewmodel.ViewModelCard
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CardItem(viewModel: ViewModelCard, item: Likeable) {
+fun CardItem(viewModel: ViewModelCard, item: Item) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
+        elevation = CardDefaults.cardElevation(8.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFEF7FF)),
         border = BorderStroke(1.dp, color = Color(0xFFCAC4D0))

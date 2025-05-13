@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,7 +22,6 @@ import rus.one.app.card.ContentCard
 import rus.one.app.card.HeadDetailsPost
 import rus.one.app.card.MediaContent
 import rus.one.app.card.PostDetailsDate
-import rus.one.app.card.StatPost
 import rus.one.app.components.bar.TopBar
 import rus.one.app.events.EventType
 import rus.one.app.events.InfoEvent
@@ -49,10 +47,11 @@ class PostDetailActivity : ComponentActivity() {
 fun DetailPost() {
     val viewModel = ViewModelCard()
 
+
     val context = LocalContext.current
     Scaffold(
         topBar = {
-            TopBar(title = stringResource(R.string.post), onBackClick = {(context as? PostDetailActivity)?.finish()}, onShareClick = {})
+            TopBar(title = stringResource(R.string.post), onBackClick = {(context as? PostDetailActivity)?.finish()}, onClick = {}, R.drawable.ic_share)
         }) { paddingValues ->
         Column(
             modifier = Modifier

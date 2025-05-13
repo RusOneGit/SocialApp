@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import rus.one.app.R
 import rus.one.app.components.button.LikeButton
 import rus.one.app.components.button.MentionedButton
-import rus.one.app.components.button.ShareButton
+import rus.one.app.components.button.TopButton
 import rus.one.app.events.event
 import rus.one.app.viewmodel.ViewModelCard
 
@@ -32,12 +34,14 @@ fun StatPost(viewModel: ViewModelCard, showMentioned: Boolean = false) {
 
         Spacer(modifier = Modifier.padding(8.dp))
 
-        ShareButton(
+        TopButton(
             modifier = Modifier
                 .padding(8.dp)
                 .size(18.dp),
             Color(0xFF6750A4),
-            onShareClick = {})
+            onClick = {},
+            painter = painterResource(R.drawable.ic_share)
+        )
 
 
         if (showMentioned) {

@@ -8,25 +8,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import rus.one.app.R
 
 
 @Composable
-fun ShareButton(modifier: Modifier = Modifier, color: Color, onShareClick: () -> Unit) {
+fun TopButton(modifier: Modifier = Modifier, color: Color, onClick: () -> Unit, painter: Painter?) {
 
     Row(
         modifier = Modifier
             .padding(8.dp)
-            .clickable(onClick = { onShareClick })
+            .clickable(onClick = { onClick })
     ) {
-        Icon(  modifier = modifier,
-            tint = color,
-            painter = painterResource(R.drawable.ic_share),
-            contentDescription = null
-        )
+        painter?.let {
+            Icon(
+                modifier = modifier,
+                painter = it,
+                contentDescription = null,
+                tint = color
+            )
 
+        }
     }
-
 }
+

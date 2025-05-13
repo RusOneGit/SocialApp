@@ -2,7 +2,7 @@ package rus.one.app.events
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import rus.one.app.common.Likeable
+import rus.one.app.common.Item
 import rus.one.app.profile.Media
 import rus.one.app.profile.User
 import rus.one.app.profile.user
@@ -22,7 +22,7 @@ data class Event(
     val mentionedCount: Int = 0,
     val speakers: MutableList<User>? = null,
     val participants: MutableList<User>? = null,
-) : Likeable
+) : Item
 
 enum class EventType {
     Online,

@@ -4,7 +4,7 @@ import rus.one.app.profile.Media
 import rus.one.app.profile.User
 import java.time.LocalDateTime
 
-interface Likeable {
+interface Item {
     val id: Int
     val author: User
     val content: String

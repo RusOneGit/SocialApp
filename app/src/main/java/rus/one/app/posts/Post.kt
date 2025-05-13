@@ -2,7 +2,7 @@ package rus.one.app.posts
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import rus.one.app.common.Likeable
+import rus.one.app.common.Item
 import rus.one.app.profile.Media
 import rus.one.app.profile.User
 import rus.one.app.profile.user
@@ -18,7 +18,7 @@ data class Post(
     override val likers: MutableList<User>? = null,
 
     val mentioned: MutableList<User>? = null
-) : Likeable
+) : Item
 
 
 const val content =

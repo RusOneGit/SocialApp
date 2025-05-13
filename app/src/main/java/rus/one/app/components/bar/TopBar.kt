@@ -9,16 +9,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import rus.one.app.components.button.BackButton
-import rus.one.app.components.button.ShareButton
+import rus.one.app.components.button.TopButton
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     title: String,
     onBackClick: () -> Unit,
-    onShareClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    painterId: Int? = null,
 ) {
     TopAppBar(
         title = {
@@ -32,8 +35,15 @@ fun TopBar(
             BackButton(onBackClick = onBackClick)
         },
         actions = {
-            onShareClick?.let {
-                ShareButton(modifier = Modifier.size(32.dp),Color(0xFF000000), onShareClick = it)
+            onClick?.let {
+                val painter =
+                    painterId?.let { id -> painterResource(id) } // Получаем painter только если id не null
+                TopButton(
+                    modifier = Modifier.size(32.dp),
+                    color = Color(0xFF000000),
+                    onClick = it,
+                    painter = painter // Передаем painter, который может быть null
+                )
             }
         }
     )
