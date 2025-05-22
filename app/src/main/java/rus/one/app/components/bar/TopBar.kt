@@ -38,12 +38,14 @@ fun TopBar(
             onClick?.let {
                 val painter =
                     painterId?.let { id -> painterResource(id) } // Получаем painter только если id не null
-                TopButton(
-                    modifier = Modifier.size(32.dp),
-                    color = Color(0xFF000000),
-                    onClick = it,
-                    painter = painter // Передаем painter, который может быть null
-                )
+                painter?.let { painter ->
+                    TopButton(
+                        modifier = Modifier.size(32.dp),
+                        color = Color(0xFF000000),
+                        onClick = it,
+                        painter = painter // Передаем painter, который может быть null
+                    )
+                }
             }
         }
     )

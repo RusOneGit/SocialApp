@@ -19,4 +19,7 @@
     <string name="profile">Profile</string>
     <string name="post_details">Post_Details</string>
     <string name="newPost">New Post</string>
+    <string name="photo">Photo</string>
+    <string name="attachment">Attachment</string>
+    <string name="location">Location</string>
 </resources>

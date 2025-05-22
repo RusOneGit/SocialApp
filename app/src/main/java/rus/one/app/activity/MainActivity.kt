@@ -1,8 +1,9 @@
 package rus.one.app.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -16,7 +17,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -25,22 +25,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
+import dagger.hilt.android.AndroidEntryPoint
+import rus.one.app.NavigationItem
 import rus.one.app.R
 import rus.one.app.card.CardItem
-import rus.one.app.components.bar.BottomBar
+import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
-import rus.one.app.posts.Post
-import rus.one.app.posts.post
-import rus.one.app.profile.user
 import rus.one.app.viewmodel.ViewModelCard
-import java.time.LocalDateTime
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.ViewModelProvider
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<ViewModelCard>()
+    private val viewModel: ViewModelCard by viewModels()
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -49,6 +51,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MainScreen(viewModel)
+
         }
     }
 }
@@ -57,19 +60,27 @@ class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(viewModel: ViewModelCard) {
+
+    Log.d("кнопка", "перерисовка")
     val message = remember{mutableStateOf("")}
 
-    val postsState = viewModel.posts.collectAsState(initial = emptyList())
+    val postsState = viewModel.posts.collectAsState()
     val posts = postsState.value
+
+    Log.d("MainScreen", "Recomposition: ${posts.size} posts")
 
     val eventsState = viewModel.events.collectAsState(initial = emptyList())
     val events = eventsState.value
+    val context = LocalContext.current
     // Предположим, что у вас есть события
 
     val selectedItemPosition = remember { mutableStateOf(0) }
 
     Scaffold(floatingActionButton = {
-        FloatingActionButton(onClick = {}) {
+        FloatingActionButton(onClick = {
+            val intent = Intent(context, NewPostActivity::class.java)
+            context.startActivity(intent)
+        }) {
             Icon(
                 painter = painterResource(R.drawable.ic_add),
                 contentDescription = stringResource(R.string.add)
@@ -81,7 +92,13 @@ fun MainScreen(viewModel: ViewModelCard) {
             title = { Text(stringResource(R.string.App_name)) },
             actions = { ProfileButton(onClick = {}) })
     }, bottomBar = {
-        BottomBar(selectedItemPosition)
+        BottomBarMain(
+            selectedItemPosition, items = listOf(
+                NavigationItem.Posts,
+                NavigationItem.Events,
+                NavigationItem.Users
+            )
+        )
     }) { paddingValues ->  // добавляем параметр padding
         // используем padding при создании содержимого
         LazyColumn(
@@ -91,8 +108,9 @@ fun MainScreen(viewModel: ViewModelCard) {
         ) {
 
             when (selectedItemPosition.value) {
-                0 -> items(posts) { post ->
+                0 -> items(posts, key = { post -> post.id }) { post ->
                     CardItem(viewModel, post) // Отображение постов
+
                 }
 
                 1 -> items(events) { event ->

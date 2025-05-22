@@ -1,6 +1,8 @@
 package rus.one.app.components.button
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -17,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import rus.one.app.R
 import rus.one.app.viewmodel.ViewModelCard
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LikeButton(viewModel: ViewModelCard) {
     Log.d("Перерисовка", "button")

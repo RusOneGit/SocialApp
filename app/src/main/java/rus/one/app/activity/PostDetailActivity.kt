@@ -27,7 +27,6 @@ import rus.one.app.events.EventType
 import rus.one.app.events.InfoEvent
 import rus.one.app.posts.post
 import rus.one.app.profile.user
-import rus.one.app.viewmodel.ViewModelCard
 import java.time.LocalDateTime
 
 class PostDetailActivity : ComponentActivity() {
@@ -45,8 +44,6 @@ class PostDetailActivity : ComponentActivity() {
 @Preview
 @Composable
 fun DetailPost() {
-    val viewModel = ViewModelCard()
-
 
     val context = LocalContext.current
     Scaffold(

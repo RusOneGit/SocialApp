@@ -1,13 +1,18 @@
 package rus.one.app.viewmodel
 
+import android.app.Application
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import rus.one.app.common.Item
 import rus.one.app.events.Event
 import rus.one.app.events.EventType
@@ -21,29 +26,13 @@ import kotlin.math.max
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
-class ViewModelCard @Inject constructor(): ViewModel() {
+class ViewModelCard @Inject constructor(
+    private val repository: PostRepository
+) : ViewModel() {
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val _posts = MutableStateFlow<List<Post>>(emptyList())
-    val posts: StateFlow<List<Post>> = _posts
-    val edited: MutableLiveData<Post> = MutableLiveData()
+    val posts: StateFlow<List<Post>> = repository.posts
 
-    init {
-        // Заполнение списка постов
-        val postList = mutableListOf<Post>().apply {
-            repeat(1) {
-                add(
-                    Post(
-                        id = it,
-                        author = user,
-                        content = post.content,
-                        date = LocalDateTime.now()
-                    )
-                )
-            }
-        }
-        _posts.value = postList
-    }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -87,14 +76,8 @@ class ViewModelCard @Inject constructor(): ViewModel() {
     }
 
     fun add(poster: Post) {
-        // Получаем текущее состояние списка постов
-        val currentPosts = _posts.value.toMutableList()
 
-        // Добавляем новый пост в список
-        currentPosts.add(poster)
-
-        // Обновляем состояние _posts с новым списком
-        _posts.value = currentPosts
+            repository.addPost(poster)
     }
 
     fun edit(poster: Post) {

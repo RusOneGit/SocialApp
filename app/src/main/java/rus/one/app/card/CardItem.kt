@@ -50,16 +50,3 @@ fun CardItem(viewModel: ViewModelCard, item: Item) {
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun PreviewPost() {
-    val viewModel = ViewModelCard()
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) { CardItem(viewModel, post) }
-
-
-}
-

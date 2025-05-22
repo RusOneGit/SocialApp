@@ -25,12 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import rus.one.app.state.PassWordState
 import rus.one.app.R
+import rus.one.app.components.bar.TopBar
 import rus.one.app.components.button.ButtonLogin
 import rus.one.app.components.field.LoginField
 import rus.one.app.components.field.PasswordInputField
-import rus.one.app.components.bar.TopBar
+import rus.one.app.state.PassWordState
 
 
 class AuthorizeActivity : ComponentActivity() {
@@ -114,7 +114,10 @@ fun Authorize() {
                 val intent = Intent(context, RegisterActivity::class.java)
                 context.startActivity(intent)
             }) {
-                Text("Don't have an account? Register", color = Color(0xFF6750A4))
+                Text(
+                    "Don't have an account? Register",
+                    color = Color(0xFF6750A4)
+                ) // Если у пользователя нет аккаунта, открываем активити с регистрацией
 
 
             }
