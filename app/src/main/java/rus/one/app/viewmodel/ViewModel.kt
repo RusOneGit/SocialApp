@@ -1,24 +1,18 @@
 package rus.one.app.viewmodel
 
-import android.app.Application
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import rus.one.app.common.Item
 import rus.one.app.events.Event
 import rus.one.app.events.EventType
 import rus.one.app.events.event
 import rus.one.app.posts.Post
-import rus.one.app.posts.post
 import rus.one.app.profile.user
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -75,13 +69,15 @@ class ViewModelCard @Inject constructor(
             if (currentLiked) max(_likesCount.value - 1, 0) else _likesCount.value + 1
     }
 
-    fun add(poster: Post) {
-
-            repository.addPost(poster)
+    fun add(post: Post) {
+        repository.addPost(post)
     }
 
-    fun edit(poster: Post) {
+    fun edit(post: Post) {
+        repository.editPost(post)
+    }
 
-
+    fun delete(post: Post) {
+        repository.deletePost(post)
     }
 }

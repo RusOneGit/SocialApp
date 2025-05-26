@@ -36,7 +36,10 @@ import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
 import rus.one.app.viewmodel.ViewModelCard
 import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
+import kotlin.getValue
 
 
 @AndroidEntryPoint
@@ -126,5 +129,4 @@ fun MainScreen(viewModel: ViewModelCard) {
     }
 
 }
-
 

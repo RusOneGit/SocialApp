@@ -50,4 +50,8 @@ class PostRepository @Inject constructor() {
     fun getPosts(): Flow<List<Post>> {
         return posts
     }
+
+    fun deletePost(post: Post) {
+        _posts.value = _posts.value.filter { it.id != post.id }
+    }
 }
