@@ -27,7 +27,7 @@ class PostRepository @Inject constructor() {
             Post(
                 id = 0,
                 author = user,
-                content = "похуй 300",
+                content = "Тестовое сообщение",
                 date = LocalDateTime.now()
             )
         )
