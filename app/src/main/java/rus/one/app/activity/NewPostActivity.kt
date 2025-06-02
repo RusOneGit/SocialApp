@@ -70,7 +70,7 @@ class NewPostActivity : ComponentActivity() {
                     Log.d("кнопка", "хуяк")
                     val newPost = Post(
                         id = viewModel.posts.value.size,
-                        author = user.copy(name = "Diana Huesoska"),
+                        author = user.copy(name = "Аноним"),
                         content = message.value,
                         date = LocalDateTime.now()
                     )
