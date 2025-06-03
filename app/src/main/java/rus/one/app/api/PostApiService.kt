@@ -1,11 +1,11 @@
 package rus.one.app.api
 
+
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -13,10 +13,12 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import rus.one.app.BuildConfig
 import rus.one.app.posts.Post
+import java.io.FileInputStream
+import java.util.Properties
 import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "${BuildConfig.BASE_URL}api/slow/"
-private val apiKey = "c1378193-bc0e-42c8-a502-b8d66d189617"
+private val apiKey = loadApiKey()
 
 private val client = OkHttpClient.Builder()
     .addInterceptor(ApiKeyInterceptor(apiKey))
@@ -66,4 +68,12 @@ class ApiKeyInterceptor(private val apiKey: String) : okhttp3.Interceptor {
             .build()
         return chain.proceed(newRequest)
     }
+}
+
+
+fun loadApiKey(): String {
+    val properties = Properties()
+    val inputStream = FileInputStream("api_key.properties")
+    properties.load(inputStream)
+    return properties.getProperty("API_KEY") ?: throw IllegalArgumentException("API_KEY not found")
 }
