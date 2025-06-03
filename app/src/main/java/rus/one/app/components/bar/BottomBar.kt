@@ -1,6 +1,5 @@
 package rus.one.app.components.bar
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,19 +8,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import rus.one.app.NavigationItem
+import androidx.navigation.compose.currentBackStackEntryAsState
+import rus.one.app.navigation.NavigationItem
+import rus.one.app.navigation.NavigationState
+import rus.one.app.posts.Attachments
 
 @Composable
-fun BottomBarMain(selectedItemPosition: MutableState<Int>, items: List<NavigationItem>) {
+fun BottomBarMain(
+    items: List<NavigationItem>, navigationState: NavigationState,
+) {
+    val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
+    val currentRout = navBackStackEntry?.destination?.route
+
+
 
     NavigationBar {
 
@@ -31,14 +38,13 @@ fun BottomBarMain(selectedItemPosition: MutableState<Int>, items: List<Navigatio
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp),
-                selected = selectedItemPosition.value == index,
+                selected = currentRout == item.screen.route,
                 onClick = {
-                    selectedItemPosition.value = index
-                    Log.d("SelectedItem", "Selected item position: ${selectedItemPosition.value}")
+                    navigationState.navigateTo(item.screen.route)
                 },
                 icon = {
                     Icon(ImageVector.vectorResource(item.icon), contentDescription = null)
-                }, label = { item.titleResID?.let { Text(stringResource(it)) } },
+                }, label = {},
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color(0xFF1D1B20),
                     selectedTextColor = Color(0xFF1D1B20),
@@ -56,7 +62,7 @@ fun BottomBarMain(selectedItemPosition: MutableState<Int>, items: List<Navigatio
 }
 
 @Composable
-fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<NavigationItem>) {
+fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<Attachments>) {
     NavigationBar {
         Row(
             modifier = Modifier.fillMaxWidth(0.5f),
@@ -72,7 +78,7 @@ fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<Naviga
                     icon = {
                         Icon(ImageVector.vectorResource(item.icon), contentDescription = null)
                     },
-                    label = { item.titleResID?.let { Text(stringResource(it)) } },
+                    label = {},
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color(0xFF1D1B20),
                         selectedTextColor = Color(0xFF1D1B20),

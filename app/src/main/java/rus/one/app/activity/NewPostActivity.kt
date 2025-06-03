@@ -15,8 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -25,14 +23,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
-import rus.one.app.NavigationItem
 import rus.one.app.R
 import rus.one.app.components.bar.BottomBarNewPost
 import rus.one.app.components.bar.TopBar
+import rus.one.app.posts.Attachments
 import rus.one.app.posts.Post
 import rus.one.app.profile.user
 import rus.one.app.viewmodel.ViewModelCard
@@ -86,10 +82,10 @@ class NewPostActivity : ComponentActivity() {
 
             BottomBarNewPost(
                 selectedItemPosition = selectedItemPosition, items = listOf(
-                    NavigationItem.Photo,
-                    NavigationItem.Attachment,
-                    NavigationItem.UsersNoTitle,
-                    NavigationItem.Location
+                    Attachments.Photo,
+                    Attachments.Attachment,
+                    Attachments.UsersNoTitle,
+                    Attachments.Location
                 )
             )
 

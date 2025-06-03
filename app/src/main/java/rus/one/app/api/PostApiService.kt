@@ -16,8 +16,10 @@ import rus.one.app.posts.Post
 import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "${BuildConfig.BASE_URL}api/slow/"
+private val apiKey = "c1378193-bc0e-42c8-a502-b8d66d189617"
 
 private val client = OkHttpClient.Builder()
+    .addInterceptor(ApiKeyInterceptor(apiKey))
     .connectTimeout(30, TimeUnit.SECONDS)
     .let {
         if (BuildConfig.DEBUG) {
@@ -56,8 +58,12 @@ interface PostApiService {
     fun dislikeByID(@Path("id") id: Long): Call<Post>
 }
 
-object PostApi {
-    val service: PostApiService by lazy {
-        retrofit.create()
+class ApiKeyInterceptor(private val apiKey: String) : okhttp3.Interceptor {
+    override fun intercept(chain: okhttp3.Interceptor.Chain): okhttp3.Response {
+        val originalRequest = chain.request()
+        val newRequest = originalRequest.newBuilder()
+            .addHeader("Authorization", "Bearer $apiKey") // или другой заголовок, в зависимости от API
+            .build()
+        return chain.proceed(newRequest)
     }
 }
