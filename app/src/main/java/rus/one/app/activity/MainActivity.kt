@@ -70,6 +70,8 @@ fun MainScreen(viewModel: ViewModelCard) {
 
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = {
+
+
             val intent = Intent(context, NewPostActivity::class.java)
             context.startActivity(intent)
         }) {
@@ -124,6 +126,7 @@ fun MainScreen(viewModel: ViewModelCard) {
             usersScreenContent = {}
         )
     }
+
 }
 
 

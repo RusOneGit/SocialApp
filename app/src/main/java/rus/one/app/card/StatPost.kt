@@ -16,7 +16,7 @@ import rus.one.app.R
 import rus.one.app.components.button.LikeButton
 import rus.one.app.components.button.MentionedButton
 import rus.one.app.components.button.TopButton
-import rus.one.app.events.event
+
 import rus.one.app.viewmodel.ViewModelCard
 
 
@@ -46,7 +46,7 @@ fun StatPost(viewModel: ViewModelCard, showMentioned: Boolean = false) {
 
         if (showMentioned) {
             Spacer(modifier = Modifier.padding(8.dp))
-            MentionedButton(event)
+
         }
 
 

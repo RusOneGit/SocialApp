@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import rus.one.app.R
 import rus.one.app.posts.Post
-import rus.one.app.posts.post
+
 import rus.one.app.viewmodel.ViewModelCard
 
 @RequiresApi(Build.VERSION_CODES.O)

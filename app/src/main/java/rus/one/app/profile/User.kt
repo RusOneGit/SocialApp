@@ -7,7 +7,8 @@ import java.util.Date
 
 
 data class User(
-    val avatar: Int,
+    val id: Int,
+    val avatar: String,
     val name: String,
     val login: String,
     val age: Int,
@@ -21,7 +22,7 @@ data class User(
         get() = job?.firstOrNull()?.title
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-val user = User(R.drawable.img, "Elena", "lenka", 22, true, job = mutableListOf(Jobs("Microsoft", "Manager",
-    period = Period(  Date(2020, 3, 1),
-        Date(2024, 4, 7)))))
+//@RequiresApi(Build.VERSION_CODES.O)
+//val user = User(1,R.drawable.img, "Elena", "lenka", 22, true, job = mutableListOf(Jobs("Microsoft", "Manager",
+//    period = Period(  Date(2020, 3, 1),
+//        Date(2024, 4, 7)))))

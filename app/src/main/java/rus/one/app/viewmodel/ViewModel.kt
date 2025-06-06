@@ -11,9 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import rus.one.app.common.Item
 import rus.one.app.events.Event
 import rus.one.app.events.EventType
-import rus.one.app.events.event
+
 import rus.one.app.posts.Post
-import rus.one.app.profile.user
+
+
 import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlin.math.max
@@ -26,6 +27,10 @@ class ViewModelCard @Inject constructor(
 
     val posts: StateFlow<List<Post>> = repository.posts
 
+    init {
+        getPosts()
+    }
+
 
 
 
@@ -33,24 +38,6 @@ class ViewModelCard @Inject constructor(
     private val _events = MutableStateFlow<List<Event>>(emptyList())
     val events: StateFlow<List<Event>> = _events
 
-    init {
-        // Заполнение списка постов
-        val eventsList = mutableListOf<Event>().apply {
-            repeat(10) {
-                add(
-                    Event(
-                        id = it,
-                        author = user,
-                        content = event.content,
-                        eventType = EventType.Online,
-                        eventDate = LocalDateTime.now(),
-                        date = LocalDateTime.now()
-                    )
-                )
-            }
-        }
-        _events.value = eventsList
-    }
 
 
     private val _itemCard = MutableLiveData<Item>()
@@ -71,6 +58,7 @@ class ViewModelCard @Inject constructor(
 
     fun add(post: Post) {
         repository.addPost(post)
+
     }
 
     fun edit(post: Post) {
@@ -79,5 +67,9 @@ class ViewModelCard @Inject constructor(
 
     fun delete(post: Post) {
         repository.deletePost(post)
+    }
+
+    fun getPosts(){
+        repository.getPosts()
     }
 }

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 @InstallIn(SingletonComponent::class)
 object ApiModule {
 
-    private const val BASE_URL = "${BuildConfig.BASE_URL}api/slow/"
+    private const val BASE_URL = "${BuildConfig.BASE_URL}api/"
 
     @Provides
     @Singleton

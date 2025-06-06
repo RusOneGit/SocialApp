@@ -29,10 +29,13 @@ import rus.one.app.R
 import rus.one.app.components.bar.BottomBarNewPost
 import rus.one.app.components.bar.TopBar
 import rus.one.app.posts.Attachments
+import rus.one.app.posts.Coords
 import rus.one.app.posts.Post
-import rus.one.app.profile.user
+
+import rus.one.app.viewmodel.PostRepository
 import rus.one.app.viewmodel.ViewModelCard
 import java.time.LocalDateTime
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class NewPostActivity : ComponentActivity() {
@@ -62,15 +65,26 @@ class NewPostActivity : ComponentActivity() {
                 title = stringResource(R.string.newPost),
                 onBackClick = { (context as? NewPostActivity)?.finish() },
                 onClick = {
-
-                    Log.d("кнопка", "хуяк")
-                    val newPost = Post(
-                        id = viewModel.posts.value.size,
-                        author = user.copy(name = "Аноним"),
-                        content = message.value,
-                        date = LocalDateTime.now()
-                    )
+                   val newPost = Post(
+                       authorId = 3,
+                       authorJob = "хоккеист",
+                       authorAvatar = "https://example.com/avatar.jpg",
+                       published = LocalDateTime.now(),
+                       coords = Coords(1.0,2.0),
+                       link = TODO(),
+                       mentionIds = TODO(),
+                       mentionedMe = TODO(),
+                       likeOwnerIds = TODO(),
+                       likedByMe = TODO(),
+                       attachment = TODO(),
+                       users = TODO(),
+                       id = 2,
+                       author = "Никита",
+                       content = message.value
+                   )
                     viewModel.add(newPost)
+                    viewModel.getPosts()
+
 
                     (context as? NewPostActivity)?.finish()
                 },

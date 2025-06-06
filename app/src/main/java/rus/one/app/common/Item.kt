@@ -1,15 +1,25 @@
 package rus.one.app.common
 
+import rus.one.app.posts.Attachment
+import rus.one.app.posts.Coords
 import rus.one.app.profile.Media
 import rus.one.app.profile.User
 import java.time.LocalDateTime
 
 interface Item {
-    val id: Int
-    val author: User
+    val id: Long
+    val authorId: Int
+    val author: String
+    val authorJob: String
+    val authorAvatar: String// URL
     val content: String
-    val date: LocalDateTime
-    val media: Media?
-    val likesCount: Int
-    val likers: MutableList<User>?
+    val published: LocalDateTime
+    val coords: Coords?
+    val link: String?
+    val mentionIds: List<Int>?
+    val mentionedMe: Boolean
+    val likeOwnerIds: List<Int>?
+    val likedByMe: Boolean
+    val attachment: Attachment?
+    val users: Map<String, User>?
 }

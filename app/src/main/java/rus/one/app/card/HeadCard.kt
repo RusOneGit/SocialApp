@@ -30,7 +30,7 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HeadCard(post: Post) {
-    val formattedDate = post.date.format(DateTimeFormatter.ofPattern("dd.MM.yy HH:mm"))
+    val formattedDate = post.published.format(DateTimeFormatter.ofPattern("dd.MM.yy HH:mm"))
     val expanded = remember { mutableStateOf(false) }
 
     Row(
@@ -43,7 +43,7 @@ fun HeadCard(post: Post) {
             modifier = Modifier
                 .padding(start = 8.dp, end = 8.dp)
                 .size(40.dp), // Отступ справа от иконки
-            painter = painterResource(post.author.avatar),
+            painter = painterResource(R.drawable.img),
             contentDescription = ""
         )
 
@@ -51,7 +51,7 @@ fun HeadCard(post: Post) {
             modifier = Modifier.weight(1f) // Занимает все доступное пространство
         ) {
             Text(modifier = Modifier.padding(4.dp),
-                text = post.author.name, color = Color(0xff1D1B20), fontWeight = FontWeight(500), fontSize =  16.sp, letterSpacing = 0.15.sp, lineHeight = 24.sp
+                text = post.author, color = Color(0xff1D1B20), fontWeight = FontWeight(500), fontSize =  16.sp, letterSpacing = 0.15.sp, lineHeight = 24.sp
 
             )
             Text( modifier = Modifier.padding(4.dp),

@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("org.jetbrains.kotlin.plugin.compose") version "2.1.20" // this version matches your Kotlin version
-    id ("kotlin-kapt")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.20" // эта версия соответствует вашей версии Kotlin
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
 
@@ -26,7 +26,9 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true // Если вы используете Jetpack Compose
     }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -37,23 +39,20 @@ android {
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
         }
 
-        debug{
+        debug {
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -63,6 +62,14 @@ android {
 
 dependencies {
     // Основные зависимости
+    implementation(libs.androidx.room.runtime)   // Основная библиотека Room
+    implementation(libs.androidx.room.ktx)       // KTX для Room
+    kapt(libs.androidx.room.compiler)            // Компилятор для Room
+    implementation("androidx.room:room-runtime:2.7.1")
+    implementation("androidx.room:room-ktx:2.7.1")
+    kapt("androidx.room:room-compiler:2.7.1")
+    // Другие зависимости...
+    implementation("io.coil-kt:coil-compose:2.4.0")
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.core.ktx)
@@ -75,6 +82,8 @@ dependencies {
     implementation(libs.androidx.material3) // Material3
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx) // LiveData
+    implementation(libs.androidx.lifecycle.viewmodel.ktx) // ViewModel
 
     // Тестирование
     testImplementation(libs.junit)
@@ -92,11 +101,4 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose) // Навигация с Hilt
-    kapt(libs.androidx.hilt.compiler) // Компилятор Hilt
-    implementation(libs.androidx.lifecycle.livedata.ktx) // LiveData
-    implementation(libs.androidx.lifecycle.viewmodel.ktx) // ViewModel
-
-    // Дополнительные зависимости
-    implementation(libs.dagger) // Dagger
-    kapt(libs.dagger.compiler) // Компилятор Dagger
 }

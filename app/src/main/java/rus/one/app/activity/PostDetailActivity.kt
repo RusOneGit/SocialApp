@@ -25,8 +25,7 @@ import rus.one.app.card.PostDetailsDate
 import rus.one.app.components.bar.TopBar
 import rus.one.app.events.EventType
 import rus.one.app.events.InfoEvent
-import rus.one.app.posts.post
-import rus.one.app.profile.user
+
 import java.time.LocalDateTime
 
 class PostDetailActivity : ComponentActivity() {
@@ -58,14 +57,9 @@ fun DetailPost() {
 
 
             ) {
-            HeadDetailsPost(post.author.avatar, post.author.name, user.actualJob)
-            MediaContent(media = post.media)
-            PostDetailsDate(post.date)
-            InfoEvent(EventType.Online, LocalDateTime.now())
-            ContentCard(post.content)
-        }
+
 
     }
-}
+}}
 
 
