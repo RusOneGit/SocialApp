@@ -5,39 +5,47 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import rus.one.app.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM posts ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAll(): LiveData<List<PostEntity>>
 
-    @Insert
-    fun insert(post: PostEntity)
-
-    @Insert
-    fun insert(posts: List<PostEntity>)
-
-    @Query("UPDATE posts SET content = :content WHERE id = :id")
-    fun updateContentById(id: Long, content: String)
-
-    fun save(post: PostEntity) =
-        if (post.id == 0L) insert(post) else updateContentById(post.id, post.content)
-
-//    @Query("""
-//        UPDATE posts SET
-//        likesCount = likesCount + CASE WHEN likedByMe THEN -1 ELSE 1 END,
-//        likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
-//        WHERE id = :id
-//        """)
-//    fun likeById(id: Long)
-
-    @Query("DELETE FROM posts WHERE id = :id")
-    fun removeById(id: Long)
+    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    fun getAllPostsFlow(): Flow<List<PostEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(posts: List<PostEntity>)
+    suspend fun insert(post: PostEntity)
 
-    @Query("SELECT * FROM posts")
-    suspend fun getAllPosts(): List<PostEntity>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(posts: List<PostEntity>)
+
+    @Update
+    suspend fun update(post: PostEntity)
+
+    @Query("UPDATE PostEntity SET content = :content WHERE id = :postId")
+    suspend fun updateContentById(postId: Long, content: String)
+
+    //  Больше не нужен, используем insert с onConflict = OnConflictStrategy.REPLACE
+    //fun save(post: PostEntity) =
+    //    if (post.id != 0L) changeContent(post.id, post.content) else insert(post)
+
+    @Query(
+        """
+        UPDATE PostEntity SET
+        likesCount = likesCount + CASE WHEN likedByMe THEN -1 ELSE 1 END,
+        likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
+        WHERE id = :id
+        """
+    )
+    suspend fun likeByID(id: Long)
+
+    @Query("DELETE FROM PostEntity WHERE id = :id")
+    suspend fun removeById(id: Long)
+
+    @Query("SELECT * FROM PostEntity WHERE id < 0")
+    suspend fun getUnsyncedPosts(): List<PostEntity>
 }

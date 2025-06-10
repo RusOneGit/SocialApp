@@ -18,11 +18,16 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDb(@ApplicationContext context: Context): AppDb {
-        return AppDb.getInstance(context)
+        val db = AppDb.getInstance(context)
+        // Принудительно открыть базу, чтобы создать файл
+        db.openHelper.writableDatabase
+        return db
     }
 
     @Provides
     fun providePostDao(appDb: AppDb): PostDao {
-        return appDb.postDao
+        return appDb.postDao()
     }
+
+
 }

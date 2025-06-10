@@ -9,6 +9,7 @@ import rus.one.app.profile.Media
 import rus.one.app.profile.User
 
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 data class Event(
     override val id: Long,
@@ -17,7 +18,7 @@ data class Event(
     override val authorJob: String,
     override val authorAvatar: String, // URL
     override  val content: String,
-    override val published: LocalDateTime,
+    override val published: OffsetDateTime,
     override val coords: Coords?,
     override  val link: String?,
     override  val mentionIds: List<Int>?,

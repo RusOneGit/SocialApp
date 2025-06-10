@@ -5,6 +5,7 @@ import rus.one.app.posts.Coords
 import rus.one.app.profile.Media
 import rus.one.app.profile.User
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 interface Item {
     val id: Long
@@ -13,7 +14,7 @@ interface Item {
     val authorJob: String
     val authorAvatar: String// URL
     val content: String
-    val published: LocalDateTime
+    val published: OffsetDateTime
     val coords: Coords?
     val link: String?
     val mentionIds: List<Int>?

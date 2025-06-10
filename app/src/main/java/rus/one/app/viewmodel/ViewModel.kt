@@ -1,21 +1,17 @@
 package rus.one.app.viewmodel
 
+
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import rus.one.app.common.Item
-import rus.one.app.events.Event
-import rus.one.app.events.EventType
-
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import rus.one.app.posts.Post
-
-
-import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlin.math.max
 
@@ -25,51 +21,72 @@ class ViewModelCard @Inject constructor(
     private val repository: PostRepository
 ) : ViewModel() {
 
-    val posts: StateFlow<List<Post>> = repository.posts
+    private val _isLiked = MutableStateFlow<Map<Long, Boolean>>(emptyMap())
+    val isLiked: StateFlow<Map<Long, Boolean>> = _isLiked
+
+    private val _likesCount = MutableStateFlow<Map<Long, Int>>(emptyMap())
+    val likesCount: StateFlow<Map<Long, Int>> = _likesCount
+
+    fun toggleLike(postID: Long) {
+        val currentLiked = _isLiked.value[postID]
+            ?: false // Получаем текущее состояние лайка для конкретного поста
+        val currentLikes = _likesCount.value[postID]
+            ?: 0 // Получаем текущее количество лайков для конкретного поста
+
+        // Обновляем состояние лайка
+        _isLiked.value = _isLiked.value.toMutableMap().apply {
+            this[postID] = !currentLiked
+        }
+
+        // Обновляем количество лайков
+        _likesCount.value = _likesCount.value.toMutableMap().apply {
+            this[postID] = if (currentLiked) max(currentLikes - 1, 0) else currentLikes + 1
+        }
+    }
+
+    val posts: StateFlow<List<Post>> = repository.posts.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+    val events: StateFlow<List<Post>> = repository.posts.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
 
     init {
         getPosts()
     }
 
-
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val _events = MutableStateFlow<List<Event>>(emptyList())
-    val events: StateFlow<List<Event>> = _events
-
-
-
-    private val _itemCard = MutableLiveData<Item>()
-    val itemCard: LiveData<Item> = _itemCard
-
-    private val _isLiked = MutableStateFlow(false)
-    val isLiked: StateFlow<Boolean> = _isLiked
-
-    private val _likesCount = MutableStateFlow(0)
-    val likesCount: StateFlow<Int> = _likesCount
-
-    fun toggleLike() {
-        val currentLiked = _isLiked.value
-        _isLiked.value = !currentLiked
-        _likesCount.value =
-            if (currentLiked) max(_likesCount.value - 1, 0) else _likesCount.value + 1
-    }
-
     fun add(post: Post) {
-        repository.addPost(post)
-
+        viewModelScope.launch {
+            repository.savePostLocally(post) //  Сохраняем локально
+        }
     }
 
     fun edit(post: Post) {
-        repository.editPost(post)
+        viewModelScope.launch {
+            repository.editPost(post)
+        }
     }
 
     fun delete(post: Post) {
-        repository.deletePost(post)
+        viewModelScope.launch {
+            repository.deletePost(post)
+        }
     }
 
-    fun getPosts(){
-        repository.getPosts()
+    fun getPosts() {
+        viewModelScope.launch {
+            repository.fetchPosts()
+        }
+    }
+
+    fun syncUnsyncedPosts() {
+        viewModelScope.launch {
+            repository.syncUnsyncedPosts()
+        }
     }
 }

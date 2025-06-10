@@ -35,6 +35,7 @@ import rus.one.app.posts.Post
 import rus.one.app.viewmodel.PostRepository
 import rus.one.app.viewmodel.ViewModelCard
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import kotlin.random.Random
 
 @AndroidEntryPoint
@@ -65,24 +66,25 @@ class NewPostActivity : ComponentActivity() {
                 title = stringResource(R.string.newPost),
                 onBackClick = { (context as? NewPostActivity)?.finish() },
                 onClick = {
-                   val newPost = Post(
-                       authorId = 3,
-                       authorJob = "хоккеист",
-                       authorAvatar = "https://example.com/avatar.jpg",
-                       published = LocalDateTime.now(),
-                       coords = Coords(1.0,2.0),
-                       link = TODO(),
-                       mentionIds = TODO(),
-                       mentionedMe = TODO(),
-                       likeOwnerIds = TODO(),
-                       likedByMe = TODO(),
-                       attachment = TODO(),
-                       users = TODO(),
-                       id = 2,
-                       author = "Никита",
-                       content = message.value
-                   )
-                    viewModel.add(newPost)
+
+                    val post = Post(
+                        id = 2, // 0, чтобы база сгенерировала id
+                        authorId = 22,
+                        author = "Никитос",
+                        authorJob = "Разработчик",
+                        authorAvatar = "https://example.com/avatar.png",
+                        content = message.value,
+                        published = OffsetDateTime.now(),
+                        coords = null,
+                        link = "fjf",
+                        mentionIds = null,
+                        mentionedMe = false,
+                        likeOwnerIds = null,
+                        likedByMe = false,
+                        attachment = null,
+                        users = emptyMap()
+                    )
+                    viewModel.add(post)
                     viewModel.getPosts()
 
 

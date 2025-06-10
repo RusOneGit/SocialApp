@@ -9,7 +9,7 @@ import rus.one.app.entity.PostEntity
 
 @Database(entities = [PostEntity::class], version = 1)
 abstract class AppDb : RoomDatabase() {
-    abstract val postDao: PostDao
+    abstract fun postDao(): PostDao
 
     companion object {
         @Volatile
@@ -17,15 +17,15 @@ abstract class AppDb : RoomDatabase() {
 
         fun getInstance(context: Context): AppDb {
             return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context)
+                instance ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDb::class.java,
+                    "app.db"
+                )
+                    .build()
                     .also { instance = it }
             }
         }
-
-        private fun buildDatabase(context: Context) = Room.databaseBuilder(
-            context, AppDb::class.java, "app.db"
-        )
-            .allowMainThreadQueries()
-            .build()
     }
+
 }

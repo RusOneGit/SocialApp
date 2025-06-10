@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import rus.one.app.api.PostApiService
 import rus.one.app.BuildConfig
+import rus.one.app.api.ApiKeyInterceptor
 import javax.inject.Singleton
 import java.util.concurrent.TimeUnit
 
@@ -21,16 +22,20 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideApiKey(): String = BuildConfig.API_KEY
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(apiKey: String): OkHttpClient {
         val builder = OkHttpClient.Builder()
+            .addInterceptor(ApiKeyInterceptor(apiKey))
             .connectTimeout(30, TimeUnit.SECONDS)
 
         if (BuildConfig.DEBUG) {
-            val logging = HttpLoggingInterceptor()
-            logging.level = HttpLoggingInterceptor.Level.BODY
-            builder.addInterceptor(logging)
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            builder.addInterceptor(loggingInterceptor)
         }
-
         return builder.build()
     }
 

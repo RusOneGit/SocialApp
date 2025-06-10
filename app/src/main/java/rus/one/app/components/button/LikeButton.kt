@@ -21,7 +21,7 @@ import rus.one.app.viewmodel.ViewModelCard
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LikeButton(viewModel: ViewModelCard) {
+fun LikeButton(viewModel: ViewModelCard, postID: Long) {
     Log.d("Перерисовка", "button")
     val isLiked = viewModel.isLiked.collectAsState()
     val likesCount = viewModel.likesCount.collectAsState()
@@ -30,7 +30,7 @@ fun LikeButton(viewModel: ViewModelCard) {
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                viewModel.toggleLike()
+                viewModel.toggleLike(postID)
             }
     ) {
         Icon(
@@ -38,13 +38,13 @@ fun LikeButton(viewModel: ViewModelCard) {
                 .padding(8.dp)
                 .size(18.dp),
             tint = Color(0xFF6750A4),
-            painter = painterResource(if (isLiked.value) R.drawable.ic_like_on else R.drawable.ic_like_off),
+            painter = painterResource(if (isLiked.value[postID] == true) R.drawable.ic_like_on else R.drawable.ic_like_off),
             contentDescription = null
         )
         Text(
             modifier = Modifier.align(Alignment.CenterVertically),
             color = Color(0xFF6750A4),
-            text = likesCount.value.takeIf { it > 0 }?.toString() ?: ""
+            text = likesCount.value[postID]?.toString() ?: "0"
         )
     }
 }

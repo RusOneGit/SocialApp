@@ -16,7 +16,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -37,10 +36,12 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
+            buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "default_api_key"}\"")
         }
 
         debug {
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
+            buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "default_api_key"}\"")
         }
     }
 
@@ -62,6 +63,7 @@ android {
 
 dependencies {
     // Основные зависимости
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation(libs.androidx.room.runtime)   // Основная библиотека Room
     implementation(libs.androidx.room.ktx)       // KTX для Room
     kapt(libs.androidx.room.compiler)            // Компилятор для Room

@@ -4,14 +4,17 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import rus.one.app.posts.Post
 import rus.one.app.posts.Attachment
 import rus.one.app.posts.Coords
 import rus.one.app.profile.User
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
-@Entity(tableName = "posts")
+@Entity(tableName = "PostEntity")
 data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
@@ -37,7 +40,7 @@ data class PostEntity(
     @RequiresApi(Build.VERSION_CODES.O)
     fun toDto(): Post {
         val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        val published = LocalDateTime.parse(date, formatter)
+        val published = OffsetDateTime.parse(date, formatter)
         val latLong = coords?.split(",")?.map { it.toDouble() }
         val coordinates = latLong?.let { Coords(it[0], it[1]) }
 
@@ -82,15 +85,16 @@ data class PostEntity(
         }
 
         private fun parseUsersJson(json: String): Map<String, User> {
-            // Реализуйте парсинг JSON в Map<String, User>
-            // Например, используя Gson или другую библиотеку
+            val gson = Gson()
+            val type = object : TypeToken<Map<String, User>>() {}.type
+            return gson.fromJson(json, type)
             return emptyMap() // Заглушка
         }
 
         private fun convertUsersToJson(users: Map<String, User>): String {
-            // Реализуйте конвертацию Map<String, User> в JSON
-            // Например, используя Gson или другую библиотеку
-            return "" // Заглушка
+            val gson = Gson()
+            return gson.toJson(users)
         }
     }
+
 }

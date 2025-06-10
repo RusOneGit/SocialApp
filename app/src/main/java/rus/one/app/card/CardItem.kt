@@ -50,7 +50,7 @@ fun CardItem(viewModel: ViewModelCard, item: Item, paddingValues: PaddingValues)
             is Event -> InfoEvent(item.eventType, item.eventDate)
         }
         ContentCard(content = item.content)
-        StatPost(viewModel, item !is Post)
+        StatPost(viewModel, item.id, item !is Post)
     }
 }
 
