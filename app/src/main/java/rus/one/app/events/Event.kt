@@ -18,7 +18,7 @@ data class Event(
     override val authorJob: String,
     override val authorAvatar: String, // URL
     override  val content: String,
-    override val published: OffsetDateTime,
+    override val published: String,
     override val coords: Coords?,
     override  val link: String?,
     override  val mentionIds: List<Int>?,

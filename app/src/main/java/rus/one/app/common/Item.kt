@@ -14,7 +14,7 @@ interface Item {
     val authorJob: String
     val authorAvatar: String// URL
     val content: String
-    val published: OffsetDateTime
+    val published: String
     val coords: Coords?
     val link: String?
     val mentionIds: List<Int>?

@@ -21,9 +21,9 @@ data class PostEntity(
 
     val authorId: Int,
     val authorName: String,
-    val authorJob: String,
-    val authorAvatar: String, // URL
-
+    val authorJob: String?,
+    val authorAvatar: String?, // URL
+    val published: String,
     val content: String,
     val date: String, // Сохраняем как String (ISO)
     val mediaUrl: String? = null, // URL медиа
@@ -40,7 +40,6 @@ data class PostEntity(
     @RequiresApi(Build.VERSION_CODES.O)
     fun toDto(): Post {
         val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        val published = OffsetDateTime.parse(date, formatter)
         val latLong = coords?.split(",")?.map { it.toDouble() }
         val coordinates = latLong?.let { Coords(it[0], it[1]) }
 
@@ -48,15 +47,15 @@ data class PostEntity(
             id = id,
             authorId = authorId,
             author = authorName,
-            authorJob = authorJob,
-            authorAvatar = authorAvatar,
+            authorJob = authorJob.toString(),
+            authorAvatar = authorAvatar.toString(),
             content = content,
             published = published,
             coords = coordinates,
             link = link,
-            mentionIds = mentionIds?.split(",")?.map { it.toInt() },
+            mentionIds = mentionIds?.split(",")?.mapNotNull { it.toIntOrNull() },
+            likeOwnerIds = likeOwnerIds?.split(",")?.mapNotNull { it.toIntOrNull() },
             mentionedMe = mentionedMe,
-            likeOwnerIds = likeOwnerIds?.split(",")?.map { it.toInt() },
             likedByMe = likedByMe,
             attachment = mediaUrl?.let { Attachment(it, "IMAGE") }, // Предполагаем, что это изображение
             users = users?.let { parseUsersJson(it) } // Вам нужно реализовать этот метод
@@ -76,6 +75,7 @@ data class PostEntity(
                 mediaUrl = dto.attachment?.url,
                 coords = dto.coords?.let { "${it.lat},${it.long}" },
                 link = dto.link,
+                published = dto.published,
                 mentionIds = dto.mentionIds?.joinToString(","),
                 mentionedMe = dto.mentionedMe,
                 likeOwnerIds = dto.likeOwnerIds?.joinToString(","),

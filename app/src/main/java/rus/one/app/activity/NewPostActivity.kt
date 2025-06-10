@@ -74,7 +74,7 @@ class NewPostActivity : ComponentActivity() {
                         authorJob = "Разработчик",
                         authorAvatar = "https://example.com/avatar.png",
                         content = message.value,
-                        published = OffsetDateTime.now(),
+                        published = "OffsetDateTime.now()",
                         coords = null,
                         link = "fjf",
                         mentionIds = null,

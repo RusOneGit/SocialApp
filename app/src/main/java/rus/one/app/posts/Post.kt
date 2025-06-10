@@ -15,7 +15,7 @@ data class Post(
     override val authorJob: String,
     override val authorAvatar: String, // URL
     override val content: String,
-    override val published:  OffsetDateTime,
+    override val published:  String,
     override val coords: Coords?,
     override val link: String?,
     override val mentionIds: List<Int>?,
@@ -47,7 +47,7 @@ val testPost = Post(
     authorJob = "Developer",
     authorAvatar = "https://example.com/avatar.jpg",
     content = "Пример контента",
-    published = OffsetDateTime.parse("2025-06-06T18:33:56.930Z",   formatter),
+    published = "2025-06-06T18:33:56.930Z",
     coords = Coords(55.7558, 37.6173),
     link = "https://example.com",
     mentionIds = listOf(1, 2),
