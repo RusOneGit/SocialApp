@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import rus.one.app.R
+import rus.one.app.components.AuthorAvatar
 import rus.one.app.posts.Post
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -39,13 +40,7 @@ fun HeadCard(post: Post) {
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically // Выравниваем элементы по центру
     ) {
-        Icon(
-            modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .size(40.dp), // Отступ справа от иконки
-            painter = painterResource(R.drawable.img),
-            contentDescription = ""
-        )
+        AuthorAvatar(post.authorAvatar, post.author)
 
         Column(
             modifier = Modifier.weight(1f) // Занимает все доступное пространство
