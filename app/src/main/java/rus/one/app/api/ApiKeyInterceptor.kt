@@ -9,10 +9,11 @@ class ApiKeyInterceptor(private val apiKey: String) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val newRequest = originalRequest.newBuilder()
-            .addHeader("Authorization", apiKey) // или другой заголовок
+            .addHeader("Api-Key", apiKey) // Используем заголовок Api-Key
             .build()
 
-        Log.d("ApiKeyInterceptor", "Authorization header added: ${newRequest.header("Authorization")}")
+        Log.d("ApiKeyInterceptor", "Api-Key header added: ${newRequest.header("Api-Key")}")
+        Log.d("ApiKeyInterceptor", "Full request: ${newRequest.toString()}")
 
         return chain.proceed(newRequest)
     }

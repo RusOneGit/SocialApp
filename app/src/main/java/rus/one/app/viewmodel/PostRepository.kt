@@ -31,12 +31,14 @@ class PostRepository @Inject constructor(
             val response = postApiService.getAllSuspend()
             if (response.isSuccessful) {
                 response.body()?.let { postsList ->
+
+                    Log.d("PostRepository", "Успешный ответ, тело: ${postsList}")
                     val entities = postsList.map { PostEntity.fromDto(it) }
                     postDao.insert(entities) //  Используем insert(List<PostEntity>)
                 }
+
             } else {
-                Log.e("PostRepository", "Ошибка API: ${response.code()}")
-                //  TODO:  Передать ошибку в ViewModel
+                Log.e("PostRepository", "Ошибка API: ${response.code()}, тело: ${response.errorBody()?.string()}")
             }
         } catch (e: Exception) {
             Log.e("PostRepository", "Ошибка при получении постов: ${e.message}")

@@ -34,15 +34,3 @@ interface PostApiService {
 }
 
 
-
-fun loadApiKey(): String {
-    val properties = Properties()
-    val inputStream = FileInputStream("api_key.properties")
-    properties.load(inputStream)
-
-    val key =
-        properties.getProperty("API_KEY") ?: throw IllegalArgumentException("API_KEY not found")
-    Log.d("ApiKeyLoader", "Loaded API key: $key")
-    return key
-}
-

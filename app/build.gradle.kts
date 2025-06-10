@@ -36,12 +36,12 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
-            buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "default_api_key"}\"")
+            buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "c1378193-bc0e-42c8-a502-b8d66d189617"}\"")
         }
 
         debug {
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
-            buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "default_api_key"}\"")
+            buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "c1378193-bc0e-42c8-a502-b8d66d189617"}\"")
         }
     }
 
