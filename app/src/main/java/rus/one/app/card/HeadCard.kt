@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import rus.one.app.R
 import rus.one.app.components.AuthorAvatar
 import rus.one.app.posts.Post
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 

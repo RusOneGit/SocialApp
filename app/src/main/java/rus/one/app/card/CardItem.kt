@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import rus.one.app.activity.PostDetailActivity
+import rus.one.app.posts.ui.activity.PostDetailActivity
 import rus.one.app.common.Item
 import rus.one.app.events.Event
 import rus.one.app.events.InfoEvent

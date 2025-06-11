@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import rus.one.app.posts.Post
+import rus.one.app.posts.data.PostRepository
 import javax.inject.Inject
 import kotlin.math.max
 

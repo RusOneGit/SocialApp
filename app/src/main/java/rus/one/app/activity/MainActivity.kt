@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
+import rus.one.app.posts.ui.activity.NewPostActivity
 import rus.one.app.card.CardItem
 import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton

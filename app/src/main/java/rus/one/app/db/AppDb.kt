@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import rus.one.app.dao.PostDao
-import rus.one.app.entity.PostEntity
+import rus.one.app.posts.data.PostDao
+import rus.one.app.posts.data.PostEntity
 
 @Database(entities = [PostEntity::class], version = 1)
 abstract class AppDb : RoomDatabase() {

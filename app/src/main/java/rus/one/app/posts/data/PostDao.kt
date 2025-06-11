@@ -1,4 +1,4 @@
-package rus.one.app.dao
+package rus.one.app.posts.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import rus.one.app.entity.PostEntity
 
 @Dao
 interface PostDao {

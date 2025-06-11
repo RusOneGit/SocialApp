@@ -21,8 +21,3 @@ data class User(
     val actualJob: String?
         get() = job?.firstOrNull()?.title
 }
-
-//@RequiresApi(Build.VERSION_CODES.O)
-//val user = User(1,R.drawable.img, "Elena", "lenka", 22, true, job = mutableListOf(Jobs("Microsoft", "Manager",
-//    period = Period(  Date(2020, 3, 1),
-//        Date(2024, 4, 7)))))

@@ -38,24 +38,3 @@ data class Attachment(
 
 @RequiresApi(Build.VERSION_CODES.O)
 val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-
-@RequiresApi(Build.VERSION_CODES.O)
-val testPost = Post(
-    id = 0,
-    authorId = 0,
-    author = "Иван Иванов",
-    authorJob = "Developer",
-    authorAvatar = "https://example.com/avatar.jpg",
-    content = "Пример контента",
-    published = "2025-06-06T18:33:56.930Z",
-    coords = Coords(55.7558, 37.6173),
-    link = "https://example.com",
-    mentionIds = listOf(1, 2),
-    mentionedMe = true,
-    likeOwnerIds = listOf(1, 3),
-    likedByMe = true,
-    attachment = Attachment("https://example.com/image.jpg", "IMAGE"),
-    users = mapOf(
-        "1" to User(id = 1, avatar = "https://example.com/user1.jpg", name = "User One", login = "", age = 0, status = true),
-        "2" to User(id = 2, avatar = "https://example.com/user2.jpg", name = "User Two", login = "", age = 0, status = true)
-    ))

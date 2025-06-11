@@ -1,4 +1,4 @@
-package rus.one.app.entity
+package rus.one.app.posts.data
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -10,8 +10,6 @@ import rus.one.app.posts.Post
 import rus.one.app.posts.Attachment
 import rus.one.app.posts.Coords
 import rus.one.app.profile.User
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
 @Entity(tableName = "PostEntity")

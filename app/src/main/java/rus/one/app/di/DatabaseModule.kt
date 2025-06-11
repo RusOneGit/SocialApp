@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import rus.one.app.db.AppDb
-import rus.one.app.dao.PostDao
+import rus.one.app.posts.data.PostDao
 import javax.inject.Singleton
 
 @Module

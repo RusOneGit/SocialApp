@@ -1,4 +1,4 @@
-package rus.one.app.activity
+package rus.one.app.posts.ui.activity
 
 import android.os.Build
 import android.os.Bundle
@@ -29,14 +29,9 @@ import rus.one.app.R
 import rus.one.app.components.bar.BottomBarNewPost
 import rus.one.app.components.bar.TopBar
 import rus.one.app.posts.Attachments
-import rus.one.app.posts.Coords
 import rus.one.app.posts.Post
 
-import rus.one.app.viewmodel.PostRepository
 import rus.one.app.viewmodel.ViewModelCard
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class NewPostActivity : ComponentActivity() {

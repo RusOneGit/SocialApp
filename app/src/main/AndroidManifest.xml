@@ -31,7 +31,7 @@
 
 
         <activity
-            android:name=".activity.PostDetailActivity"
+            android:name=".posts.ui.activity.PostDetailActivity"
             android:exported="true"
             android:label="@string/post_details"
             android:theme="@style/Theme.SocialActivity">
@@ -50,7 +50,7 @@
         </activity>
 
         <activity
-            android:name=".activity.NewPostActivity"
+            android:name=".posts.ui.activity.NewPostActivity"
             android:exported="true"
             android:theme="@style/Theme.SocialActivity">
         </activity>

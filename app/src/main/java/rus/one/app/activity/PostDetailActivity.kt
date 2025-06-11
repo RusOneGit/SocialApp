@@ -1,4 +1,4 @@
-package rus.one.app.activity
+package rus.one.app.posts.ui.activity
 
 import android.os.Build
 import android.os.Bundle
@@ -18,15 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import rus.one.app.R
-import rus.one.app.card.ContentCard
-import rus.one.app.card.HeadDetailsPost
-import rus.one.app.card.MediaContent
-import rus.one.app.card.PostDetailsDate
 import rus.one.app.components.bar.TopBar
-import rus.one.app.events.EventType
-import rus.one.app.events.InfoEvent
-
-import java.time.LocalDateTime
 
 class PostDetailActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)

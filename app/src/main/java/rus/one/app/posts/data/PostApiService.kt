@@ -1,7 +1,5 @@
-package rus.one.app.api
+package rus.one.app.posts.data
 
-
-import android.util.Log
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -9,8 +7,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import rus.one.app.posts.Post
-import java.io.FileInputStream
-import java.util.Properties
 
 interface PostApiService {
 
@@ -32,5 +28,3 @@ interface PostApiService {
     @DELETE("posts/{id}/likes")
     suspend fun dislikeByID(@Path("id") id: Long): Response<Post>
 }
-
-

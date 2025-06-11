@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import rus.one.app.api.PostApiService
+import rus.one.app.posts.data.PostApiService
 import rus.one.app.BuildConfig
 import rus.one.app.api.ApiKeyInterceptor
 import javax.inject.Singleton

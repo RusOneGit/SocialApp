@@ -1,4 +1,4 @@
-package rus.one.app.viewmodel
+package rus.one.app.posts.data
 
 import android.os.Build
 import android.util.Log
@@ -7,9 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import rus.one.app.api.PostApiService
-import rus.one.app.dao.PostDao
-import rus.one.app.entity.PostEntity
 import rus.one.app.posts.Post
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,7 +30,7 @@ class PostRepository @Inject constructor(
                 response.body()?.let { postsList ->
 
                     Log.d("PostRepository", "Успешный ответ, тело: ${postsList}")
-                    val entities = postsList.map { PostEntity.fromDto(it) }
+                    val entities = postsList.map { PostEntity.Companion.fromDto(it) }
                     postDao.insert(entities) //  Используем insert(List<PostEntity>)
                 }
 
@@ -64,7 +61,7 @@ class PostRepository @Inject constructor(
     }
 
     suspend fun savePostLocally(post: Post) {
-        val entity = PostEntity.fromDto(post.copy(id = -System.currentTimeMillis())) //  Генерируем отрицательный ID
+        val entity = PostEntity.Companion.fromDto(post.copy(id = -System.currentTimeMillis())) //  Генерируем отрицательный ID
         postDao.insert(entity)
     }
 
@@ -85,7 +82,7 @@ class PostRepository @Inject constructor(
                 val response = postApiService.save(post)
                 if (response.isSuccessful) {
                     response.body()?.let { newPost ->
-                        postDao.insert(PostEntity.fromDto(newPost).copy(id = entity.id)) //  Обновляем ID
+                        postDao.insert(PostEntity.Companion.fromDto(newPost).copy(id = entity.id)) //  Обновляем ID
                     }
                 } else {
                     Log.e("PostRepository", "Ошибка API при синхронизации поста: ${response.code()}")
@@ -98,4 +95,3 @@ class PostRepository @Inject constructor(
         }
     }
 }
-
