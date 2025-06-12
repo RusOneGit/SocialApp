@@ -23,7 +23,7 @@
         val authorAvatar: String?, // URL
         val published: String,
         val content: String,
-        val mediaUrl: String? = null, // URL медиа
+        val attachment: String? = null, // URL медиа
 
         val coords: String? = null, // Сохраняем координаты как строку "lat,long"
         val link: String? = null,
@@ -39,6 +39,13 @@
             val latLong = coords?.split(",")?.map { it.toDouble() }
             val coordinates = latLong?.let { Coords(it[0], it[1]) }
             val usersMap: Map<String, User>? = users?.let {parseUsersJson(it)}
+            val attachmentObj: Attachment? = attachment?.let {
+                try {
+                    Gson().fromJson(it, Attachment::class.java)
+                } catch (e: Exception) {
+                    null
+                }
+            }
 
 
             return Post(
@@ -55,7 +62,7 @@
                 likeOwnerIds = likeOwnerIds?.split(",")?.mapNotNull { it.toIntOrNull() },
                 mentionedMe = mentionedMe,
                 likedByMe = likedByMe,
-                attachment = mediaUrl?.let { Attachment(it, "IMAGE") }, // Предполагаем, что это изображение
+                attachment = attachmentObj, // Предполагаем, что это изображение
                 users = usersMap // Вам нужно реализовать этот метод
             )
         }
@@ -63,6 +70,13 @@
         companion object {
             fun fromDto(dto: Post): PostEntity {
                 val usersJson = dto.users?.let {convertUsersToJson(it) }
+                val attachmentJson: String? = dto.attachment?.let {
+                    try {
+                        Gson().toJson(it)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
 
                 return PostEntity(
                     id = dto.id,
@@ -71,7 +85,7 @@
                     authorJob = dto.authorJob,
                     authorAvatar = dto.authorAvatar,
                     content = dto.content,
-                    mediaUrl = dto.attachment?.url,
+                    attachment = attachmentJson ,
                     coords = dto.coords?.let { "${it.lat},${it.long}" },
                     link = dto.link,
                     published = dto.published,

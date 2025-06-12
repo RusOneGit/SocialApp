@@ -89,6 +89,19 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx) // LiveData
     implementation(libs.androidx.lifecycle.viewmodel.ktx) // ViewModel
 
+    // Базовый ExoPlayer (Media3) — плеер и ядро
+    implementation("androidx.media3:media3-exoplayer:1.1.0")
+
+    // UI-компоненты Media3 (PlayerView и др.)
+    implementation("androidx.media3:media3-ui:1.1.0")
+
+    // Compose-совместимые UI-компоненты (экспериментальные)
+    implementation("androidx.media3:media3-session:1.1.0")
+    implementation("androidx.media3:media3-exoplayer-dash:1.1.0") // если нужен DASH
+    implementation("androidx.media3:media3-exoplayer-hls:1.1.0")  // если нужен HLS
+
+
+
     // Тестирование
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
