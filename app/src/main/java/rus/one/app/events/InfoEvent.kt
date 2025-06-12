@@ -13,26 +13,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import rus.one.app.util.formatIsoDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun InfoEvent(type: EventType, evenDateTime: LocalDateTime){
-    val formattedDate = evenDateTime.format(DateTimeFormatter.ofPattern("dd.MM.yy HH:mm"))
+fun InfoEvent(type: EventType, evenDateTime: String){
+
 
     Column(modifier = Modifier.padding(8.dp)) {
         Text(modifier = Modifier.padding(start = 8.dp), text = type.name, color = Color(0xFF1D1B20), fontSize = 16.sp )
         Spacer(modifier = Modifier.padding(bottom = 4.dp))
-        Text(modifier = Modifier.padding(start = 8.dp, bottom = 8.dp), text = formattedDate, textAlign = TextAlign.Center, color = Color(0xFF49454F), fontSize = 14.sp)
+        Text(modifier = Modifier.padding(start = 8.dp, bottom = 8.dp), text = formatIsoDate(evenDateTime), textAlign = TextAlign.Center, color = Color(0xFF49454F), fontSize = 14.sp)
     }
 
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun PreviewInfo(){
-    InfoEvent(EventType.Online, LocalDateTime.now())
 }

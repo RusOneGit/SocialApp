@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import rus.one.app.posts.data.PostApiService
 import rus.one.app.BuildConfig
 import rus.one.app.api.ApiKeyInterceptor
+import rus.one.app.events.data.EventApiService
 import javax.inject.Singleton
 import java.util.concurrent.TimeUnit
 
@@ -52,4 +53,10 @@ object ApiModule {
     @Singleton
     fun providePostApiService(retrofit: Retrofit): PostApiService =
         retrofit.create(PostApiService::class.java)
+
+
+    @Provides
+    @Singleton
+    fun provideEventApiService(retrofit: Retrofit): EventApiService =
+        retrofit.create(EventApiService::class.java)
 }

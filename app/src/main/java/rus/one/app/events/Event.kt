@@ -1,15 +1,9 @@
 package rus.one.app.events
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import rus.one.app.common.Item
 import rus.one.app.posts.Attachment
 import rus.one.app.posts.Coords
-import rus.one.app.profile.Media
 import rus.one.app.profile.User
-
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
 
 data class Event(
     override val id: Long,
@@ -17,26 +11,28 @@ data class Event(
     override val author: String,
     override val authorJob: String,
     override val authorAvatar: String, // URL
-    override  val content: String,
+    override val content: String,
     override val published: String,
     override val coords: Coords?,
-    override  val link: String?,
-    override  val mentionIds: List<Int>?,
-    override   val mentionedMe: Boolean,
-    override   val likeOwnerIds: List<Int>?,
-    override   val likedByMe: Boolean,
-    override   val attachment: Attachment?,
-    override    val users: Map<String, User>?,
+    override val link: String?,
+    override val likeOwnerIds: List<Int>?,
+    override val likedByMe: Boolean,
+    override val attachment: Attachment?,
+    override val users: Map<String, User>?,
 
+    val participatedByMe: Boolean,
     val eventType: EventType,
-    val eventDate: LocalDateTime,
-    val mentionedCount: Int = 0,
-    val speakers: MutableList<User>? = null,
-    val participants: MutableList<User>? = null,
+    val dataTime: String,
+    val speakerIds: List<Int>? = null,
+    val participantsIds: List<Int>? = null,
 ) : Item
 
 enum class EventType {
+    ONLINE,
+    OFFLINE,
+    online,
     Online,
+    offline,
     Offline
 }
 

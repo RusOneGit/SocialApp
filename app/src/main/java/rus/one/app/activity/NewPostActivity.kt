@@ -69,7 +69,7 @@ class NewPostActivity : ComponentActivity() {
                         authorJob = "Разработчик",
                         authorAvatar = "https://example.com/avatar.png",
                         content = message.value,
-                        published = "OffsetDateTime.now()",
+                        published = "2025-06-12T12:49:35.637Z",
                         coords = null,
                         link = "fjf",
                         mentionIds = null,
@@ -77,10 +77,9 @@ class NewPostActivity : ComponentActivity() {
                         likeOwnerIds = null,
                         likedByMe = false,
                         attachment = null,
-                        users = emptyMap()
+                        users = null
                     )
                     viewModel.add(post)
-                    viewModel.getPosts()
 
 
                     (context as? NewPostActivity)?.finish()

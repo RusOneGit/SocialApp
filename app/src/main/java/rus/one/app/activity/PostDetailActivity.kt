@@ -1,5 +1,7 @@
 package rus.one.app.posts.ui.activity
 
+
+import rus.one.app.posts.data.PostRepository
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,25 +18,43 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import rus.one.app.R
+import rus.one.app.card.HeadDetailsPost
 import rus.one.app.components.bar.TopBar
+import rus.one.app.posts.Post
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PostDetailActivity : ComponentActivity() {
+    @Inject
+    lateinit var postRepository: PostRepository
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            DetailPost()
+
+        val postId = intent.getLongExtra("postId", -1L)
+        var post: Post? = null
+
+        lifecycleScope.launch {
+            post = postRepository.getPostById(postId)
+            setContent {
+                if (post != null) {
+                    DetailPost(post!!)
+                } else {
+                    // Можно показать экран ошибки или заглушку
+                }
+            }
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Preview
 @Composable
-fun DetailPost() {
+fun DetailPost(post: Post) {
 
     val context = LocalContext.current
     Scaffold(
@@ -50,6 +70,7 @@ fun DetailPost() {
 
             ) {
 
+            HeadDetailsPost(post)
 
     }
 }}

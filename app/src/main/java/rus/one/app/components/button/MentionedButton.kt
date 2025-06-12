@@ -34,11 +34,13 @@ fun MentionedButton(event: Event) {
             painter = painterResource(if (isMentioned.value) R.drawable.ic_people_no_outline else R.drawable.ic_people_outline),
             contentDescription = null
         )
-        Text(
-            modifier = Modifier.align(Alignment.CenterVertically),
-            color = Color(0xFF6750A4),
-            text =  if(event.mentionedCount > 0) event.mentionedCount.toString() else ""
-        )
+        event.participantsIds?.size?.let {
+            Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                color = Color(0xFF6750A4),
+                text =  if(it > 0) event.participantsIds.size.toString() else ""
+            )
+        }
     }
 
 }

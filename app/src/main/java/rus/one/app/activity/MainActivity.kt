@@ -3,6 +3,7 @@ package rus.one.app.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -34,6 +35,7 @@ import rus.one.app.components.button.ProfileButton
 import rus.one.app.navigation.AppNavGraph
 import rus.one.app.navigation.NavigationItem
 import rus.one.app.navigation.rememberNavigationState
+import rus.one.app.posts.ui.activity.PostDetailActivity
 import rus.one.app.viewmodel.ViewModelCard
 
 
@@ -64,15 +66,13 @@ fun MainScreen(viewModel: ViewModelCard) {
 
 
 
-    val eventsState = viewModel.events.collectAsState(initial = emptyList())
+    val eventsState = viewModel.events.collectAsState()
     val events = eventsState.value
     val context = LocalContext.current
     // Предположим, что у вас есть события
 
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = {
-
-
             val intent = Intent(context, NewPostActivity::class.java)
             context.startActivity(intent)
         }) {
@@ -106,7 +106,14 @@ fun MainScreen(viewModel: ViewModelCard) {
                         CardItem(
                             viewModel = viewModel,
                             item = post,
-                            paddingValues = paddingValues
+                            paddingValues = paddingValues,
+                            onClick = {
+                                Log.d("click","$post.id" )
+                                val intent = Intent(context, PostDetailActivity::class.java)
+                                intent.putExtra("postId", post.id)
+                                context.startActivity(intent)
+
+                            }
                         ) // Передаем paddingValues
                     }
                 }
@@ -119,7 +126,12 @@ fun MainScreen(viewModel: ViewModelCard) {
                         CardItem(
                             viewModel = viewModel,
                             item = event,
-                            paddingValues = paddingValues
+                            paddingValues = paddingValues,
+                            onClick = {
+                                val intent = Intent(context, PostDetailActivity::class.java)
+                                intent.putExtra("postId", event.id)
+                                context.startActivity(intent)
+                            }
                         ) // Передаем paddingValues
                     }
                 }

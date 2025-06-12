@@ -22,6 +22,9 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(posts: List<PostEntity>)
 
+    @Query("SELECT * FROM PostEntity WHERE id = :postId LIMIT 1")
+    suspend fun getPostById(postId: Long): PostEntity?
+
     @Update
     suspend fun update(post: PostEntity)
 

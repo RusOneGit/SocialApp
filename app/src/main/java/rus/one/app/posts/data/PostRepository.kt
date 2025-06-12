@@ -29,7 +29,7 @@ class PostRepository @Inject constructor(
             if (response.isSuccessful) {
                 response.body()?.let { postsList ->
 
-                    Log.d("PostRepository", "Успешный ответ, тело: ${postsList}")
+                    Log.d("Количество", "Успешный ответ, тело: ${postsList.size}")
                     val entities = postsList.map { PostEntity.Companion.fromDto(it) }
                     postDao.insert(entities) //  Используем insert(List<PostEntity>)
                 }
@@ -93,5 +93,11 @@ class PostRepository @Inject constructor(
                 //  TODO:  Обработать ошибку
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getPostById(postId: Long): Post? {
+        val entity = postDao.getPostById(postId)
+        return entity?.toDto()
     }
 }

@@ -19,18 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import rus.one.app.R
 import rus.one.app.components.AuthorAvatar
 import rus.one.app.posts.Post
+import rus.one.app.util.formatIsoDate
 import java.time.format.DateTimeFormatter
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HeadCard(post: Post) {
-    val formattedDate = post.published.format(DateTimeFormatter.ofPattern("dd.MM.yy HH:mm"))
     val expanded = remember { mutableStateOf(false) }
 
     Row(
@@ -49,7 +50,7 @@ fun HeadCard(post: Post) {
 
             )
             Text( modifier = Modifier.padding(4.dp),
-                text = formattedDate, color = Color(0xff1D1B20), fontWeight = FontWeight(400), fontSize = 14.sp, letterSpacing = 0.25.sp, lineHeight = 20.sp
+                text = formatIsoDate(post.published), color = Color(0xff1D1B20), fontWeight = FontWeight(400), fontSize = 14.sp, letterSpacing = 0.25.sp, lineHeight = 20.sp
             )
         }
 
@@ -64,6 +65,7 @@ fun HeadCard(post: Post) {
         )
     }
 
-    DropdownMenuWithViewModel(expanded = expanded.value, onDismiss = { expanded.value = false }, post)
+         DropdownMenuWithViewModel(expanded = expanded.value, onDismiss = { expanded.value = false }, post)
 
 }
+

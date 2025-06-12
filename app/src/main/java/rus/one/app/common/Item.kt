@@ -2,10 +2,7 @@ package rus.one.app.common
 
 import rus.one.app.posts.Attachment
 import rus.one.app.posts.Coords
-import rus.one.app.profile.Media
 import rus.one.app.profile.User
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
 
 interface Item {
     val id: Long
@@ -17,8 +14,6 @@ interface Item {
     val published: String
     val coords: Coords?
     val link: String?
-    val mentionIds: List<Int>?
-    val mentionedMe: Boolean
     val likeOwnerIds: List<Int>?
     val likedByMe: Boolean
     val attachment: Attachment?
