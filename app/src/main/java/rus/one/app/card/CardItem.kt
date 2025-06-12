@@ -45,7 +45,7 @@ fun CardItem(
             is Post -> HeadCard(item)
             is Event -> InfoEvent(item.type, item.datetime)
         }
-        ContentCard(content = item.content)
+        item.attachment?.url?.let { ContentCard(content = item.content, it) }
         StatPost(viewModel, item.id, item !is Post)
     }
 }
