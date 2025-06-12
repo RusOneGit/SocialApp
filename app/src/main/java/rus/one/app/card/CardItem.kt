@@ -43,7 +43,7 @@ fun CardItem(
         Modifier.padding(paddingValues) // Применяем paddingValues к содержимому карточки
         when (item) {
             is Post -> HeadCard(item)
-            is Event -> InfoEvent(item.eventType, item.dataTime.toString())
+            is Event -> InfoEvent(item.type, item.datetime)
         }
         ContentCard(content = item.content)
         StatPost(viewModel, item.id, item !is Post)

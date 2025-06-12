@@ -21,19 +21,15 @@ data class Event(
     override val users: Map<String, User>?,
 
     val participatedByMe: Boolean,
-    val eventType: EventType,
-    val dataTime: String,
+    val type: EventType,
+    val datetime: String,
     val speakerIds: List<Int>? = null,
     val participantsIds: List<Int>? = null,
 ) : Item
 
 enum class EventType {
     ONLINE,
-    OFFLINE,
-    online,
-    Online,
-    offline,
-    Offline
+    OFFLINE
 }
 
 //const val content =

@@ -29,7 +29,6 @@ class PostRepository @Inject constructor(
             if (response.isSuccessful) {
                 response.body()?.let { postsList ->
 
-                    Log.d("Количество", "Успешный ответ, тело: ${postsList.size}")
                     val entities = postsList.map { PostEntity.Companion.fromDto(it) }
                     postDao.insert(entities) //  Используем insert(List<PostEntity>)
                 }

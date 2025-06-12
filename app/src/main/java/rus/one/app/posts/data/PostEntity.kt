@@ -36,7 +36,6 @@
     ) {
         @RequiresApi(Build.VERSION_CODES.O)
         fun toDto(): Post {
-            val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
             val latLong = coords?.split(",")?.map { it.toDouble() }
             val coordinates = latLong?.let { Coords(it[0], it[1]) }
             val usersMap: Map<String, User>? = users?.let {parseUsersJson(it)}

@@ -31,6 +31,7 @@ class EventRepository @Inject constructor(
 
                     Log.d("Количество", "Успешный ответ, тело: ${eventsList.size}")
                     val entities = eventsList.map { EventEntity.fromDto(it) }
+                    Log.d("Количество", "Saving EventEntity: $entities")
                     eventDao.insert(entities)
                     try {
                         val count = eventDao.getCount()

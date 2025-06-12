@@ -68,7 +68,7 @@ class ViewModelCard @Inject constructor(
     ).also {
         viewModelScope.launch {
             it.collect { list ->
-                Log.d("ViewModelCard", "События  обновились: ${list.size} штук")
+                Log.d("ViewModelCard", "События  обновились: ${list} штук")
             }
         }
     }
