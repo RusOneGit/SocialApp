@@ -10,14 +10,12 @@ data class User(
     val id: Int,
     val avatar: String,
     val name: String,
-    val login: String,
-    val age: Int,
-    val status: Boolean,
+    val login: String)
 
-    val job: MutableList<Jobs>? = null,
-    val friends: MutableList<User>? = null,
-
-    ){
-    val actualJob: String?
-        get() = job?.firstOrNull()?.title
-}
+//    val job: MutableList<Jobs>? = null,
+//    val friends: MutableList<User>? = null,
+//
+//    ){
+//    val actualJob: String?
+//        get() = job?.firstOrNull()?.title
+//}

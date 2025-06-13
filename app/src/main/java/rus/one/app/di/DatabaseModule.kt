@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import rus.one.app.db.AppDb
 import rus.one.app.events.data.EventDao
 import rus.one.app.posts.data.PostDao
+import rus.one.app.profile.UserDao
 import javax.inject.Singleton
 
 @Module
@@ -36,5 +37,9 @@ object DatabaseModule {
         return appDb.eventDao()
     }
 
+    @Provides
+    fun provideUserDao(appDb: AppDb): UserDao {
+        return appDb.userDao()
+    }
 
 }

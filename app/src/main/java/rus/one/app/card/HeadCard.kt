@@ -65,7 +65,32 @@ fun HeadCard(post: Post) {
         )
     }
 
-         DropdownMenuWithViewModel(expanded = expanded.value, onDismiss = { expanded.value = false }, post)
+   //      DropdownMenuWithViewModel(expanded = expanded.value, onDismiss = { expanded.value = false }, post)
 
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+@Preview
+fun PreviewHead(){
+    val post = Post(
+        id = 1,
+        authorId = 2,
+        author = "TODO()",
+        authorJob = "Job",
+        authorAvatar = "",
+        content = "Hello",
+        published = "2025-04-15T08:01:49.472Z",
+        coords = null,
+        link = null,
+        likeOwnerIds = null,
+        likedByMe = true,
+        attachment =null,
+        users = null,
+        mentionedMe = true,
+        mentionIds = null
+    )
+    HeadCard(post)
 }
 

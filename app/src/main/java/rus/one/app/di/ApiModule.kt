@@ -12,6 +12,7 @@ import rus.one.app.posts.data.PostApiService
 import rus.one.app.BuildConfig
 import rus.one.app.api.ApiKeyInterceptor
 import rus.one.app.events.data.EventApiService
+import rus.one.app.profile.UserApiService
 import javax.inject.Singleton
 import java.util.concurrent.TimeUnit
 
@@ -59,4 +60,10 @@ object ApiModule {
     @Singleton
     fun provideEventApiService(retrofit: Retrofit): EventApiService =
         retrofit.create(EventApiService::class.java)
+
+
+    @Provides
+    @Singleton
+    fun provideUserApiService(retrofit: Retrofit): UserApiService =
+        retrofit.create(UserApiService::class.java)
 }

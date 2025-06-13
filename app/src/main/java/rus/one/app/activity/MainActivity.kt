@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
 import rus.one.app.posts.ui.activity.NewPostActivity
 import rus.one.app.card.CardItem
+import rus.one.app.card.UserCard
 import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
 import rus.one.app.navigation.AppNavGraph
@@ -69,6 +70,9 @@ fun MainScreen(viewModel: ViewModelCard) {
     val eventsState = viewModel.events.collectAsState()
     val events = eventsState.value
     val context = LocalContext.current
+
+    val userState = viewModel.users.collectAsState()
+    val users = userState.value
     // Предположим, что у вас есть события
 
     Scaffold(floatingActionButton = {
@@ -135,7 +139,17 @@ fun MainScreen(viewModel: ViewModelCard) {
                     }
                 }
             },
-            usersScreenContent = {}
+            usersScreenContent = {
+                LazyColumn(
+                    modifier = Modifier.padding(paddingValues)
+                ) {
+
+                  items(users){ user->
+                      UserCard(user)
+                  }
+                }
+
+            }
         )
     }
 

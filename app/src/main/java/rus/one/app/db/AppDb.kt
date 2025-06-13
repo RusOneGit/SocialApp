@@ -8,11 +8,14 @@ import rus.one.app.events.EventEntity
 import rus.one.app.events.data.EventDao
 import rus.one.app.posts.data.PostDao
 import rus.one.app.posts.data.PostEntity
+import rus.one.app.profile.UserDao
+import rus.one.app.profile.UserEntity
 
-@Database(entities = [PostEntity::class, EventEntity::class], version = 1)
+@Database(entities = [PostEntity::class, EventEntity::class, UserEntity::class], version = 1)
 abstract class AppDb : RoomDatabase() {
     abstract fun postDao(): PostDao
     abstract fun eventDao(): EventDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile

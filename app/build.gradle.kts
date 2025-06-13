@@ -67,7 +67,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation(libs.androidx.room.runtime)   // Основная библиотека Room
-    implementation(libs.androidx.room.ktx)       // KTX для Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.play.services.identity.credentials)       // KTX для Room
     kapt(libs.androidx.room.compiler)            // Компилятор для Room
     implementation("androidx.room:room-runtime:2.7.1")
     implementation("androidx.room:room-ktx:2.7.1")
