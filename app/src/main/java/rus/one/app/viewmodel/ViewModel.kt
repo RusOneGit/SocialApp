@@ -32,20 +32,21 @@ class ViewModelCard @Inject constructor(
     private val _likesCount = MutableStateFlow<Map<Long, Int>>(emptyMap())
     val likesCount: StateFlow<Map<Long, Int>> = _likesCount
 
-    fun toggleLike(postID: Long) {
-        val currentLiked = _isLiked.value[postID]
-            ?: false // Получаем текущее состояние лайка для конкретного поста
-        val currentLikes = _likesCount.value[postID]
-            ?: 0 // Получаем текущее количество лайков для конкретного поста
-
-        // Обновляем состояние лайка
-        _isLiked.value = _isLiked.value.toMutableMap().apply {
-            this[postID] = !currentLiked
+    fun likePost(postId: Long) {
+        viewModelScope.launch {
+            val success = repository.likePost(postId)
+            if (!success) {
+                // Обработка ошибки, например, показать сообщение
+            }
         }
+    }
 
-        // Обновляем количество лайков
-        _likesCount.value = _likesCount.value.toMutableMap().apply {
-            this[postID] = if (currentLiked) max(currentLikes - 1, 0) else currentLikes + 1
+    fun dislikePost(postId: Long) {
+        viewModelScope.launch {
+            val success = repository.dislikePost(postId)
+            if (!success) {
+                // Обработка ошибки
+            }
         }
     }
 
@@ -78,7 +79,8 @@ class ViewModelCard @Inject constructor(
     init {
         getPosts()
         getEvents()
-    }
+        }
+
 
     fun add(post: Post) {
         viewModelScope.launch {

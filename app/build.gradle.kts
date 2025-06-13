@@ -90,16 +90,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx) // ViewModel
 
     // Базовый ExoPlayer (Media3) — плеер и ядро
-    implementation("androidx.media3:media3-exoplayer:1.1.0")
+    implementation("androidx.media3:media3-exoplayer:1.7.1")
 
     // UI-компоненты Media3 (PlayerView и др.)
-    implementation("androidx.media3:media3-ui:1.1.0")
+    implementation("androidx.media3:media3-ui:1.7.1")
 
     // Compose-совместимые UI-компоненты (экспериментальные)
-    implementation("androidx.media3:media3-session:1.1.0")
-    implementation("androidx.media3:media3-exoplayer-dash:1.1.0") // если нужен DASH
-    implementation("androidx.media3:media3-exoplayer-hls:1.1.0")  // если нужен HLS
-
+    implementation("androidx.media3:media3-session:1.7.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.7.1") // если нужен DASH
+    implementation("androidx.media3:media3-exoplayer-hls:1.7.1")  // если нужен HLS
+    implementation("com.google.android.exoplayer:exoplayer-core:2.19.1")
+    implementation("com.google.android.exoplayer:exoplayer-ui:2.19.1")
 
 
     // Тестирование

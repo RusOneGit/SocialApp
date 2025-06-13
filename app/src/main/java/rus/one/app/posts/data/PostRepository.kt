@@ -42,6 +42,7 @@ class PostRepository @Inject constructor(
         }
     }
 
+
     suspend fun addPost(post: Post) {
         try {
             val response = postApiService.save(post)
@@ -66,6 +67,39 @@ class PostRepository @Inject constructor(
 
     suspend fun editPost(post: Post) {
         postDao.updateContentById(post.id, post.content)
+    }
+
+    suspend fun likePost(postId: Long): Boolean {
+        return try {
+            val response = postApiService.likeByID(postId)
+            if (response.isSuccessful) {
+                response.body()?.let { updatedPost ->
+                    postDao.insert(PostEntity.fromDto(updatedPost)) // Вызов insert из DAO
+                }
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+
+    suspend fun dislikePost(postId: Long): Boolean {
+        return try {
+            val response = postApiService.dislikeByID(postId)
+            if (response.isSuccessful) {
+                response.body()?.let { updatedPost ->
+                    postDao.insert(PostEntity.fromDto(updatedPost))
+                }
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
     }
 
     suspend fun deletePost(post: Post) {

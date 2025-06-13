@@ -108,7 +108,6 @@ fun MainScreen(viewModel: ViewModelCard) {
                             item = post,
                             paddingValues = paddingValues,
                             onClick = {
-                                Log.d("click","$post.id" )
                                 val intent = Intent(context, PostDetailActivity::class.java)
                                 intent.putExtra("postId", post.id)
                                 context.startActivity(intent)
