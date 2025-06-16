@@ -3,7 +3,6 @@ package rus.one.app.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -28,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
-import rus.one.app.posts.ui.activity.NewPostActivity
 import rus.one.app.card.CardItem
 import rus.one.app.card.UserCard
 import rus.one.app.components.bar.BottomBarMain
@@ -36,6 +34,8 @@ import rus.one.app.components.button.ProfileButton
 import rus.one.app.navigation.AppNavGraph
 import rus.one.app.navigation.NavigationItem
 import rus.one.app.navigation.rememberNavigationState
+import rus.one.app.posts.PostScreen
+import rus.one.app.posts.ui.activity.NewPostActivity
 import rus.one.app.posts.ui.activity.PostDetailActivity
 import rus.one.app.viewmodel.ViewModelCard
 
@@ -103,23 +103,11 @@ fun MainScreen(viewModel: ViewModelCard) {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             homeScreenContent = {
-                LazyColumn(
-                    modifier = Modifier.padding(paddingValues) // Применяем padding к LazyColumn
-                ) {
-                    items(posts, key = { post -> post.id }) { post ->
-                        CardItem(
-                            viewModel = viewModel,
-                            item = post,
-                            paddingValues = paddingValues,
-                            onClick = {
-                                val intent = Intent(context, PostDetailActivity::class.java)
-                                intent.putExtra("postId", post.id)
-                                context.startActivity(intent)
-
-                            }
-                        ) // Передаем paddingValues
-                    }
-                }
+                PostScreen(
+                    viewModel = viewModel,
+                    paddingValues = paddingValues,
+                    onClick = { }
+                )
             },
             eventsScreenContent = {
                 LazyColumn(

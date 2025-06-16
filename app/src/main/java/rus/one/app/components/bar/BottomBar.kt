@@ -8,12 +8,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -44,7 +46,8 @@ fun BottomBarMain(
                 },
                 icon = {
                     Icon(ImageVector.vectorResource(item.icon), contentDescription = null)
-                }, label = {},
+                }, label = {Text(stringResource(item.titleResID))
+                },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color(0xFF1D1B20),
                     selectedTextColor = Color(0xFF1D1B20),

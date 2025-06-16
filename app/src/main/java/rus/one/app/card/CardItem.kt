@@ -32,8 +32,8 @@ fun CardItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp), // Общий отступ для карточки
-        elevation = CardDefaults.cardElevation(8.dp),
+            .padding(8.dp,top = 4.dp, bottom = 4.dp, end = 8.dp), // Общий отступ для карточки
+//        elevation = CardDefaults.cardElevation(8.dp),
         shape = RoundedCornerShape(12.dp),
         onClick = { onClick(item) },
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFEF7FF)),

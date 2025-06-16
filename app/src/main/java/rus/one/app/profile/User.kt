@@ -8,7 +8,7 @@ import java.util.Date
 
 data class User(
     val id: Int,
-    val avatar: String,
+    val avatar: String?,
     val name: String,
     val login: String)
 

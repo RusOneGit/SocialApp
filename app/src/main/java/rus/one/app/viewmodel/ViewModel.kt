@@ -10,7 +10,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import rus.one.app.events.Event
 import rus.one.app.events.data.EventRepository
@@ -18,6 +20,7 @@ import rus.one.app.posts.Post
 import rus.one.app.posts.data.PostRepository
 import rus.one.app.profile.User
 import rus.one.app.profile.UserRepository
+import rus.one.app.state.FeedState
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -31,8 +34,12 @@ class ViewModelCard @Inject constructor(
     private val _isLiked = MutableStateFlow<Map<Long, Boolean>>(emptyMap())
     val isLiked: StateFlow<Map<Long, Boolean>> = _isLiked
 
+    private val _feedState = MutableStateFlow(FeedState(loading = true))
+    val feedState: StateFlow<FeedState> = _feedState.asStateFlow()
+
     private val _likesCount = MutableStateFlow<Map<Long, Int>>(emptyMap())
     val likesCount: StateFlow<Map<Long, Int>> = _likesCount
+
 
     fun likePost(postId: Long) {
         viewModelScope.launch {
@@ -87,12 +94,71 @@ class ViewModelCard @Inject constructor(
             }
         }
     }
+    private fun observePosts() {
+        viewModelScope.launch {
+            postRepository.posts.collect { postsList ->
+                // Этот блок теперь только обновляет список,
+                // не трогая isRefreshing, error, loading напрямую,
+                // если они управляются через load()
+                _feedState.update { currentState ->
+                    currentState.copy(
+                        item = postsList,
+                        empty = postsList.isEmpty()
+                        // loading = false, // Управляется в load или другими методами
+                        // error = false  // Управляется в load или другими методами
+                    )
+                }
+            }
+        }
+    }
 
+    fun load() {
+        if (_feedState.value.isRefreshing) return
+
+        _feedState.update {
+            it.copy(
+                isRefreshing = true,
+                loading = true,
+                error = false
+            )
+        } // Добавим loading = true
+        viewModelScope.launch {
+            try {
+                postRepository.syncUnsyncedPosts()
+                val result =
+                    postRepository.fetchPosts() // Предположим, result содержит данные или ошибку
+
+                if (result is PostRepository.FetchResult.Success) {
+                    // Если fetchPosts сам возвращает данные для отображения:
+                    _feedState.update {
+                        it.copy(
+                            item = result.posts, // Обновляем item здесь
+                            empty = result.posts.isEmpty(),
+                            error = false
+                        )
+                    }
+                } else if (result is PostRepository.FetchResult.Error) {
+                    Log.e("ViewModelCard", "Ошибка загрузки постов: ${result.errorMessage}")
+                    _feedState.update { it.copy(error = true) } // Оставляем текущий item или делаем его пустым
+                }
+            } catch (e: Exception) {
+                Log.e("ViewModelCard", "Исключение при загрузке: ${e.message}")
+                _feedState.update { it.copy(error = true) }
+            } finally {
+                _feedState.update {
+                    it.copy(
+                        isRefreshing = false,
+                        loading = false
+                    )
+                } // Сбрасываем оба флага
+            }
+        }
+    }
 
     init {
-        getPosts()
         getEvents()
         getUsers()
+        load()
     }
 
 

@@ -16,7 +16,7 @@ data class UserEntity(
     fun toDto(): User{
         return User(
             id = id,
-            avatar = avatar.toString(),
+            avatar = avatar,
             name = name,
             login = login
         )

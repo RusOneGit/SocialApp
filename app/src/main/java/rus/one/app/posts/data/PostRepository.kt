@@ -19,26 +19,28 @@ class PostRepository @Inject constructor(
 
     //  Получаем Flow из DAO
     @RequiresApi(Build.VERSION_CODES.O)
-    val posts: Flow<List<Post>> = postDao.getAllPostsFlow().map { list ->
-        list.map { it.toDto() }
-    }.flowOn(Dispatchers.IO) //  Выполняем преобразование в IO потоке
+    val posts: Flow<List<Post>> = postDao.getAllPostsFlow()
+        .map { entities -> entities.map { it.toDto() } }
 
-    suspend fun fetchPosts() {
-        try {
+    sealed class FetchResult {
+        data class Success(val posts: List<Post>) : FetchResult()
+        data class Error(val errorMessage: String) : FetchResult()
+    }
+
+    suspend fun fetchPosts(): FetchResult {
+        return try {
             val response = postApiService.getAllSuspend()
             if (response.isSuccessful) {
-                response.body()?.let { postsList ->
-
-                    val entities = postsList.map { PostEntity.Companion.fromDto(it) }
-                    postDao.insert(entities) //  Используем insert(List<PostEntity>)
-                }
-
+                val postsList = response.body() ?: emptyList()
+                val entities = postsList.map { PostEntity.fromDto(it) }
+                postDao.insert(entities)
+                FetchResult.Success(postsList)
             } else {
-                Log.e("PostRepository", "Ошибка API: ${response.code()}, тело: ${response.errorBody()?.string()}")
+                val errorBody = response.errorBody()?.string()
+                FetchResult.Error("Ошибка API: ${response.code()} $errorBody")
             }
         } catch (e: Exception) {
-            Log.e("PostRepository", "Ошибка при получении постов: ${e.message}")
-            //  TODO:  Передать ошибку в ViewModel
+            FetchResult.Error(e.message ?: "Неизвестная ошибка")
         }
     }
 
