@@ -11,10 +11,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import rus.one.app.posts.data.PostApiService
 import rus.one.app.BuildConfig
 import rus.one.app.api.ApiKeyInterceptor
+import rus.one.app.api.AuthorizationInterceptor
 import rus.one.app.events.data.EventApiService
 import rus.one.app.profile.UserApiService
 import javax.inject.Singleton
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -24,13 +26,21 @@ object ApiModule {
 
     @Provides
     @Singleton
+    @Named("apiKey")
     fun provideApiKey(): String = BuildConfig.API_KEY
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(apiKey: String): OkHttpClient {
+    @Named("authToken")
+    fun provideAuthKey(): String = BuildConfig.AUTH_TOKEN
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient( @Named("apiKey") apiKey: String,
+                             @Named("authToken") authToken: String): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .addInterceptor(ApiKeyInterceptor(apiKey))
+            .addInterceptor(AuthorizationInterceptor(authToken))
             .connectTimeout(30, TimeUnit.SECONDS)
 
         if (BuildConfig.DEBUG) {

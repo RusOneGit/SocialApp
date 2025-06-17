@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -97,15 +98,11 @@ class ViewModelCard @Inject constructor(
     private fun observePosts() {
         viewModelScope.launch {
             postRepository.posts.collect { postsList ->
-                // Этот блок теперь только обновляет список,
-                // не трогая isRefreshing, error, loading напрямую,
-                // если они управляются через load()
                 _feedState.update { currentState ->
                     currentState.copy(
                         item = postsList,
                         empty = postsList.isEmpty()
-                        // loading = false, // Управляется в load или другими методами
-                        // error = false  // Управляется в load или другими методами
+
                     )
                 }
             }
@@ -114,7 +111,6 @@ class ViewModelCard @Inject constructor(
 
     fun load() {
         if (_feedState.value.isRefreshing) return
-
         _feedState.update {
             it.copy(
                 isRefreshing = true,
@@ -123,6 +119,8 @@ class ViewModelCard @Inject constructor(
             )
         } // Добавим loading = true
         viewModelScope.launch {
+
+
             try {
                 postRepository.syncUnsyncedPosts()
                 val result =
@@ -160,6 +158,7 @@ class ViewModelCard @Inject constructor(
         getUsers()
         load()
     }
+
 
 
     fun add(post: Post) {
