@@ -1,6 +1,6 @@
 package rus.one.app.card
 
-import DropdownMenuWithViewModel
+import ItemMenu
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
@@ -19,19 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import rus.one.app.R
+import rus.one.app.common.Item
 import rus.one.app.components.AuthorAvatar
 import rus.one.app.posts.Post
 import rus.one.app.util.formatIsoDate
-import java.time.format.DateTimeFormatter
+import rus.one.app.viewmodel.BaseFeedViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HeadCard(post: Post) {
+fun HeadCard(viewModel: BaseFeedViewModel<Item>, item: Item) {
     val expanded = remember { mutableStateOf(false) }
 
     Row(
@@ -40,17 +40,17 @@ fun HeadCard(post: Post) {
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically // Выравниваем элементы по центру
     ) {
-        AuthorAvatar(post.authorAvatar, post.author)
+        AuthorAvatar(item.authorAvatar, item.author)
 
         Column(
             modifier = Modifier.weight(1f) // Занимает все доступное пространство
         ) {
             Text(modifier = Modifier.padding(4.dp),
-                text = post.author, color = Color(0xff1D1B20), fontWeight = FontWeight(500), fontSize =  16.sp, letterSpacing = 0.15.sp, lineHeight = 24.sp
+                text = item.author, color = Color(0xff1D1B20), fontWeight = FontWeight(500), fontSize =  16.sp, letterSpacing = 0.15.sp, lineHeight = 24.sp
 
             )
             Text( modifier = Modifier.padding(4.dp),
-                text = formatIsoDate(post.published), color = Color(0xff1D1B20), fontWeight = FontWeight(400), fontSize = 14.sp, letterSpacing = 0.25.sp, lineHeight = 20.sp
+                text = formatIsoDate(item.published), color = Color(0xff1D1B20), fontWeight = FontWeight(400), fontSize = 14.sp, letterSpacing = 0.25.sp, lineHeight = 20.sp
             )
         }
 
@@ -65,32 +65,8 @@ fun HeadCard(post: Post) {
         )
     }
 
-   //      DropdownMenuWithViewModel(expanded = expanded.value, onDismiss = { expanded.value = false }, post)
+    ItemMenu(viewModel = viewModel, expanded = expanded.value, onDismiss = { expanded.value = false }, item = item)
 
 }
 
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-@Preview
-fun PreviewHead(){
-    val post = Post(
-        id = 1,
-        authorId = 2,
-        author = "TODO()",
-        authorJob = "Job",
-        authorAvatar = "",
-        content = "Hello",
-        published = "2025-04-15T08:01:49.472Z",
-        coords = null,
-        link = null,
-        likeOwnerIds = null,
-        likedByMe = true,
-        attachment =null,
-        users = null,
-        mentionedMe = true,
-        mentionIds = null
-    )
-    HeadCard(post)
-}
 

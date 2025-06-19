@@ -5,14 +5,15 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import rus.one.app.common.Item
 import rus.one.app.posts.Post
+import rus.one.app.viewmodel.BaseFeedViewModel
 import rus.one.app.viewmodel.PostViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DropdownMenuWithViewModel(expanded: Boolean, onDismiss: () -> Unit, post: Post) {
-    // Получаем ViewModel с помощью Hilt
-    val viewModel: PostViewModel = hiltViewModel()
+fun ItemMenu(viewModel: BaseFeedViewModel<Item>, expanded: Boolean, onDismiss: () -> Unit, item: Item) {
+
 
     // Выпадающее меню
     DropdownMenu(
@@ -31,7 +32,7 @@ fun DropdownMenuWithViewModel(expanded: Boolean, onDismiss: () -> Unit, post: Po
             text = { Text("Изменить") }, // Указываем текст для второго элемента
             onClick = {
                 onDismiss() // Закрываем меню
-               viewModel.edit(post)
+               viewModel.edit(item)
             }
         )
     }

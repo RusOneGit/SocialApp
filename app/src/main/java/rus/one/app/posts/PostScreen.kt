@@ -21,21 +21,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import rus.one.app.card.CardItem
 import rus.one.app.common.Item
-import rus.one.app.state.FeedState
 import rus.one.app.viewmodel.BaseFeedViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T : Item> ContentScreen(
-    viewModel: BaseFeedViewModel<T>,
+fun  PostScreen(
+    viewModel: BaseFeedViewModel<Item>,
     paddingValues: PaddingValues,
     onClick: (Item) -> Unit,
 ) {
@@ -48,7 +45,6 @@ fun <T : Item> ContentScreen(
         modifier = Modifier.fillMaxSize(),
         state = pullRefreshState,
         indicator = {
-            // Кастомизированный индикатор
             Indicator(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -99,7 +95,7 @@ fun <T : Item> ContentScreen(
                             viewModel = viewModel,
                             item = item,
                             paddingValues = paddingValues,
-                            onClick = onClick
+                            onClick =  { }
                         )
 
                     }

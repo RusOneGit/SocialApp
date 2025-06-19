@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.StateFlow
 import rus.one.app.common.Item
 import rus.one.app.state.FeedState
 
-abstract class BaseFeedViewModel<T> : ViewModel() {
-    abstract val feedState: StateFlow<FeedState<T>>
+abstract class BaseFeedViewModel<Item> : ViewModel() {
+    abstract val feedState: StateFlow<FeedState<Item>>
     abstract fun load()
     abstract fun refresh()
     abstract fun like(itemID: Long)

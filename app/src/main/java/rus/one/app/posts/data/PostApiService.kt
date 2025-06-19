@@ -10,33 +10,33 @@ import rus.one.app.posts.Post
 
 interface PostApiService {
 
-    @GET("item")
+    @GET("posts")
     suspend fun getAllSuspend(): Response<List<Post>>
 
-    @POST("item")
+    @POST("posts")
     suspend fun save(@Body post: Post): Response<Post>
 
-    @POST("item/{id}/likes")
+    @POST("posts/{id}/likes")
     suspend fun likeByID(@Path("id") id: Long): Response<Post>
 
-    @DELETE("item/{id}/likes")
+    @DELETE("posts/{id}/likes")
     suspend fun dislikeByID(@Path("id") id: Long): Response<Post>
 
-    @GET("item/{id}/newer")
+    @GET("posts/{id}/newer")
     suspend fun getNewer(@Path("id") id: Long): Response<List<Post>>
 
-    @GET("item/{id}/before")
+    @GET("posts/{id}/before")
     suspend fun getBefore(@Path("id") id: Long): Response<List<Post>>
 
-    @GET("item/{id}/after")
+    @GET("posts/{id}/after")
     suspend fun getAfter(@Path("id") id: Long): Response<List<Post>>
 
-    @GET("item/{id}")
+    @GET("posts/{id}")
     suspend fun getByID(@Path("id") id: Long): Response<Post>
 
-    @DELETE("item/{id}")
+    @DELETE("posts/{id}")
     suspend fun removeByID(@Path("id") id: Long): Response<Unit>
 
-    @GET("item/latest")
+    @GET("posts/latest")
     suspend fun getLatest(): Response<List<Post>>
 }

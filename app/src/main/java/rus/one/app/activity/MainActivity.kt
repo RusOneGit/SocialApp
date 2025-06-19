@@ -27,25 +27,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
-import rus.one.app.card.CardItem
 import rus.one.app.card.UserCard
+import rus.one.app.common.Item
 import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
 import rus.one.app.navigation.AppNavGraph
 import rus.one.app.navigation.NavigationItem
 import rus.one.app.navigation.rememberNavigationState
-import rus.one.app.posts.ContentScreen
+import rus.one.app.posts.PostScreen
 import rus.one.app.posts.ui.activity.NewPostActivity
-import rus.one.app.posts.ui.activity.PostDetailActivity
-import rus.one.app.viewmodel.EventViewModel
-import rus.one.app.viewmodel.PostViewModel
+import rus.one.app.profile.UserViewModel
+import rus.one.app.viewmodel.BaseFeedViewModel
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val postViewModel: PostViewModel by viewModels()
-    private val eventViewModel: EventViewModel by viewModels()
+    private val postViewModel: BaseFeedViewModel<Item> by viewModels()
+    private val eventViewModel: BaseFeedViewModel<Item> by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainScreen(postViewModel, eventViewModel)
+            MainScreen(postViewModel, eventViewModel, userViewModel)
 
         }
     }
@@ -63,18 +63,16 @@ class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
-    postViewModel: PostViewModel,
-    eventViewModel: EventViewModel,
+    postViewModel: BaseFeedViewModel<Item>,
+    eventViewModel: BaseFeedViewModel<Item>,
+    userViewModel: UserViewModel,
 ) {
     val navigationState = rememberNavigationState()
 
-    val eventsState = eventViewModel.events.collectAsState()
-    val events = eventsState.value
     val context = LocalContext.current
 
-//    val userState = postViewModel.users.collectAsState()
-//    val users = userState.value
-    // Предположим, что у вас есть события
+    val userState = userViewModel.users.collectAsState()
+    val users = userState.value
 
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = {
@@ -104,28 +102,29 @@ fun MainScreen(
         AppNavGraph(
             navHostController = navigationState.navHostController,
             homeScreenContent = {
-                ContentScreen(
+                PostScreen(
                     viewModel = postViewModel,
                     paddingValues = paddingValues,
                     onClick = { }
                 )
             },
             eventsScreenContent = {
-                ContentScreen(
+                PostScreen(
                     viewModel = eventViewModel,
                     paddingValues = paddingValues,
                     onClick = { }
                 )
             },
             usersScreenContent = {
-//                LazyColumn(
-//                    modifier = Modifier.padding(paddingValues)
-//                ) {
-//
-//                  items(users){ user->
-//                      UserCard(user)
-//                  }
-//                }
+                LazyColumn(
+                    modifier = Modifier.padding(paddingValues)
+                ) {
+
+                    items(users, key = { it.id }) { user ->
+                        UserCard(user)
+
+                    }
+                }
 
             }
         )

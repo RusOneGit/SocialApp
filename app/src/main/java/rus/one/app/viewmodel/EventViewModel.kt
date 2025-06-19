@@ -32,12 +32,6 @@ class EventViewModel @Inject constructor(
 
 
 
-//    override val feedState = MutableStateFlow(FeedState<Event>(loading = true))
-//    val _feedState: StateFlow<FeedState<Event>> = feedState.asStateFlow()
-
-
-
-    // Публичное свойство, реализующее абстрактное feedState
 
 
     val events: StateFlow<List<Event>> = eventRepository.events.stateIn(
@@ -85,11 +79,11 @@ class EventViewModel @Inject constructor(
 
     }
 
-    override fun add(item: Item) {
+    override fun add(item: Event) {
         TODO("Not yet implemented")
     }
 
-    override fun edit(item: Item) {
+    override fun edit(item: Event) {
         TODO("Not yet implemented")
     }
 

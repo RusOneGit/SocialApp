@@ -17,8 +17,6 @@ import rus.one.app.common.FetchResult
 import rus.one.app.common.Item
 import rus.one.app.posts.Post
 import rus.one.app.posts.data.PostRepository
-import rus.one.app.profile.User
-import rus.one.app.profile.UserRepository
 import rus.one.app.state.FeedState
 import javax.inject.Inject
 
@@ -26,8 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val postRepository: PostRepository,
-    private val userRepository: UserRepository
-) : BaseFeedViewModel<Post>() {
+
+    ) : BaseFeedViewModel<Post>() {
 
     private val _isLiked = MutableStateFlow<Map<Long, Boolean>>(emptyMap())
     val isLiked: StateFlow<Map<Long, Boolean>> = _isLiked
@@ -98,12 +96,12 @@ class PostViewModel @Inject constructor(
 
     }
 
-    override fun add(item: Item) {
+    override fun add(item: Post) {
         viewModelScope.launch { postRepository.addPost(item as Post) }
 
     }
 
-    override fun edit(item: Item) {
+    override fun edit(item: Post) {
         viewModelScope.launch {
             postRepository.editPost(item as Post)
         }
@@ -153,18 +151,6 @@ class PostViewModel @Inject constructor(
         }
 
 
-        val users: StateFlow<List<User>> = userRepository.users.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        ).also {
-            viewModelScope.launch {
-                it.collect { list ->
-                    Log.d("ViewModelCard", "События  обновились: ${list} штук")
-                }
-            }
-        }
-
         fun observePosts() {
             viewModelScope.launch {
                 postRepository.posts.collect { postsList ->
@@ -205,13 +191,5 @@ class PostViewModel @Inject constructor(
 
         }
 
-
-        fun getUsers() {
-            viewModelScope.launch {
-                userRepository.fetchUsers()
-            }
-
-
         }
     }
-}

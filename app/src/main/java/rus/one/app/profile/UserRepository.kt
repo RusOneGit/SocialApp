@@ -22,7 +22,6 @@ class UserRepository @Inject constructor(
         list.map { it.toDto() }
     }.flowOn(Dispatchers.IO) //  Выполняем преобразование в IO потоке
 
-
     suspend fun fetchUsers() {
         try {
             val response = userApiService.getUsers()
