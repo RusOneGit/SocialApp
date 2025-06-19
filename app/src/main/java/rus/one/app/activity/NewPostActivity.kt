@@ -31,12 +31,12 @@ import rus.one.app.components.bar.TopBar
 import rus.one.app.posts.Attachments
 import rus.one.app.posts.Post
 
-import rus.one.app.viewmodel.ViewModelCard
+import rus.one.app.viewmodel.PostViewModel
 
 @AndroidEntryPoint
 class NewPostActivity : ComponentActivity() {
 
-    private val viewModel: ViewModelCard by viewModels()
+    private val viewModel: PostViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class NewPostActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    fun NewPost(viewModel: ViewModelCard) {
+    fun NewPost(viewModel: PostViewModel) {
         val message = remember { mutableStateOf("") }
         val context = LocalContext.current
         val selectedItemPosition = remember { mutableStateOf(0) }

@@ -17,13 +17,14 @@ import rus.one.app.common.Item
 import rus.one.app.events.Event
 import rus.one.app.events.InfoEvent
 import rus.one.app.posts.Post
-import rus.one.app.viewmodel.ViewModelCard
+import rus.one.app.viewmodel.BaseFeedViewModel
+import rus.one.app.viewmodel.PostViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CardItem(
-    viewModel: ViewModelCard,
+fun <T: Item> CardItem(
+    viewModel: BaseFeedViewModel<T>,
     item: Item,
     paddingValues: PaddingValues,
     onClick: (Item) -> Unit,

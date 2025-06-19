@@ -9,7 +9,7 @@ interface Item {
     val authorId: Int
     val author: String
     val authorJob: String
-    val authorAvatar: String// URL
+    val authorAvatar: String?// URL
     val content: String
     val published: String
     val coords: Coords?
@@ -18,4 +18,8 @@ interface Item {
     val likedByMe: Boolean
     val attachment: Attachment?
     val users: Map<String, User>?
+}
+sealed class FetchResult {
+    data class Success(val item: List<Item>) : FetchResult()
+    data class Error(val errorMessage: String) : FetchResult()
 }

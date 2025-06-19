@@ -34,16 +34,18 @@ import rus.one.app.components.button.ProfileButton
 import rus.one.app.navigation.AppNavGraph
 import rus.one.app.navigation.NavigationItem
 import rus.one.app.navigation.rememberNavigationState
-import rus.one.app.posts.PostScreen
+import rus.one.app.posts.ContentScreen
 import rus.one.app.posts.ui.activity.NewPostActivity
 import rus.one.app.posts.ui.activity.PostDetailActivity
-import rus.one.app.viewmodel.ViewModelCard
+import rus.one.app.viewmodel.EventViewModel
+import rus.one.app.viewmodel.PostViewModel
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: ViewModelCard by viewModels()
+    private val postViewModel: PostViewModel by viewModels()
+    private val eventViewModel: EventViewModel by viewModels()
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,7 +53,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainScreen(viewModel)
+            MainScreen(postViewModel, eventViewModel)
 
         }
     }
@@ -60,19 +62,18 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainScreen(viewModel: ViewModelCard) {
+fun MainScreen(
+    postViewModel: PostViewModel,
+    eventViewModel: EventViewModel,
+) {
     val navigationState = rememberNavigationState()
-    val postsState = viewModel.posts.collectAsState()
-    val posts = postsState.value
 
-
-
-    val eventsState = viewModel.events.collectAsState()
+    val eventsState = eventViewModel.events.collectAsState()
     val events = eventsState.value
     val context = LocalContext.current
 
-    val userState = viewModel.users.collectAsState()
-    val users = userState.value
+//    val userState = postViewModel.users.collectAsState()
+//    val users = userState.value
     // Предположим, что у вас есть события
 
     Scaffold(floatingActionButton = {
@@ -103,39 +104,28 @@ fun MainScreen(viewModel: ViewModelCard) {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             homeScreenContent = {
-                PostScreen(
-                    viewModel = viewModel,
+                ContentScreen(
+                    viewModel = postViewModel,
                     paddingValues = paddingValues,
                     onClick = { }
                 )
             },
             eventsScreenContent = {
-                LazyColumn(
-                    modifier = Modifier.padding(paddingValues) // Применяем padding к LazyColumn
-                ) {
-                    items(events) { event ->
-                        CardItem(
-                            viewModel = viewModel,
-                            item = event,
-                            paddingValues = paddingValues,
-                            onClick = {
-                                val intent = Intent(context, PostDetailActivity::class.java)
-                                intent.putExtra("postId", event.id)
-                                context.startActivity(intent)
-                            }
-                        ) // Передаем paddingValues
-                    }
-                }
+                ContentScreen(
+                    viewModel = eventViewModel,
+                    paddingValues = paddingValues,
+                    onClick = { }
+                )
             },
             usersScreenContent = {
-                LazyColumn(
-                    modifier = Modifier.padding(paddingValues)
-                ) {
-
-                  items(users){ user->
-                      UserCard(user)
-                  }
-                }
+//                LazyColumn(
+//                    modifier = Modifier.padding(paddingValues)
+//                ) {
+//
+//                  items(users){ user->
+//                      UserCard(user)
+//                  }
+//                }
 
             }
         )

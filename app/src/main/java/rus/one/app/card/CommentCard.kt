@@ -18,7 +18,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
-import rus.one.app.viewmodel.ViewModelCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)

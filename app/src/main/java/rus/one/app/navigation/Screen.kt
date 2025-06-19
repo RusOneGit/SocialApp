@@ -9,7 +9,7 @@ sealed class Screen(
     object UsersScreen: Screen(ROUTE_USERS)
 
     private companion object{
-        const val ROUTE_POSTS = "posts"
+        const val ROUTE_POSTS = "item"
         const val ROUTE_EVENTS = "events"
         const val ROUTE_USERS = "users"
 

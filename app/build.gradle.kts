@@ -38,13 +38,13 @@ android {
             )
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
             buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "c1378193-bc0e-42c8-a502-b8d66d189617"}\"")
-            buildConfigField("String", "AUTH_TOKEN", "\"${project.findProperty("AUTH_TOKEN") ?: "rbzF2R9diF1b7INLjarLCutM53g2aP5GDIdTsjsaIgcQd/8qOfXba+845xK47XoBp8lKGNTzo/c/yYGBdJCQHOYHkLwXz1fZi7RM2UgD71GFHKKQYIzv54fKiSjBrWQymV7GobA7Y0MWfLVTM2jMAAHHlrnV5vwwUoYIqBV5Vi4"}\"")
+            buildConfigField("String", "AUTH_TOKEN", "\"${project.findProperty("AUTH_TOKEN") ?: "G05lreGid+fiBT5vQmM7qZVHw93aZnvbSBJQkDUtcftX/8B1ZmHKJXI1vlibkWVlWml98XxnGE5nyu3+aBvWswGehVK6IKIuYKSi7bSf907iFXDEC+h7iWcrezRGlgTx/2anIwG+lBbqtKl0I4BIqD2CgW1tExI5+sfpaLZTT/M"}\"")
         }
 
         debug {
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
             buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "c1378193-bc0e-42c8-a502-b8d66d189617"}\"")
-            buildConfigField("String", "AUTH_TOKEN", "\"${project.findProperty("AUTH_TOKEN") ?: "rbzF2R9diF1b7INLjarLCutM53g2aP5GDIdTsjsaIgcQd/8qOfXba+845xK47XoBp8lKGNTzo/c/yYGBdJCQHOYHkLwXz1fZi7RM2UgD71GFHKKQYIzv54fKiSjBrWQymV7GobA7Y0MWfLVTM2jMAAHHlrnV5vwwUoYIqBV5Vi4"}\"")
+            buildConfigField("String", "AUTH_TOKEN", "\"${project.findProperty("AUTH_TOKEN") ?: "G05lreGid+fiBT5vQmM7qZVHw93aZnvbSBJQkDUtcftX/8B1ZmHKJXI1vlibkWVlWml98XxnGE5nyu3+aBvWswGehVK6IKIuYKSi7bSf907iFXDEC+h7iWcrezRGlgTx/2anIwG+lBbqtKl0I4BIqD2CgW1tExI5+sfpaLZTT/M"}\"")
         }
     }
 

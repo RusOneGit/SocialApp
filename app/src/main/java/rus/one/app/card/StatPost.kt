@@ -13,22 +13,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import rus.one.app.R
+import rus.one.app.common.Item
 import rus.one.app.components.button.LikeButton
 import rus.one.app.components.button.TopButton
+import rus.one.app.viewmodel.BaseFeedViewModel
 
-import rus.one.app.viewmodel.ViewModelCard
+import rus.one.app.viewmodel.PostViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun StatPost(viewModel: ViewModelCard, postID: Long, showMentioned: Boolean = false) {
-    val viewModel: ViewModelCard = viewModel
+fun <T: Item>StatPost(viewModel: BaseFeedViewModel<T>, itemID: Long, showMentioned: Boolean = false) {
 
 
     Row {
         Log.d("Перерисовка", "Статс")
 
-        LikeButton(viewModel, postID)
+        LikeButton(viewModel, itemID)
 
 
         Spacer(modifier = Modifier.padding(8.dp))

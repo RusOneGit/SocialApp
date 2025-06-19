@@ -53,7 +53,7 @@
                 authorId = authorId,
                 author = authorName,
                 authorJob = authorJob.toString(),
-                authorAvatar = authorAvatar.toString(),
+                authorAvatar = authorAvatar,
                 content = content,
                 published = published,
                 coords = coordinates,

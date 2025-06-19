@@ -1,5 +1,6 @@
 package rus.one.app.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -24,8 +25,10 @@ fun AuthorAvatar(
     avatarUrl: String?,
     name: String,
 ) {
+    Log.d("AuthorAvatar", "Загрузка изображения для $name из $avatarUrl")
     if (avatarUrl != null)
     AsyncImage(
+
         model = ImageRequest.Builder(LocalContext.current)
             .data(avatarUrl)
             .build(),
@@ -37,6 +40,7 @@ fun AuthorAvatar(
         contentScale = ContentScale.Crop
     )
     else {
+        Log.d("AuthorAvatar", "Загрузка изображения для $name из текстового поля")
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier

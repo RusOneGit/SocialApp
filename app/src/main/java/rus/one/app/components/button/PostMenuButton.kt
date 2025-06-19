@@ -6,13 +6,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import rus.one.app.posts.Post
-import rus.one.app.viewmodel.ViewModelCard
+import rus.one.app.viewmodel.PostViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DropdownMenuWithViewModel(expanded: Boolean, onDismiss: () -> Unit, post: Post) {
     // Получаем ViewModel с помощью Hilt
-    val viewModel: ViewModelCard = hiltViewModel()
+    val viewModel: PostViewModel = hiltViewModel()
 
     // Выпадающее меню
     DropdownMenu(

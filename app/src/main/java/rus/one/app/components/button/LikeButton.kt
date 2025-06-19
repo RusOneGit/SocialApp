@@ -17,22 +17,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import rus.one.app.R
-import rus.one.app.viewmodel.ViewModelCard
+import rus.one.app.common.Item
+import rus.one.app.viewmodel.BaseFeedViewModel
+import rus.one.app.viewmodel.PostViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LikeButton(viewModel: ViewModelCard, postID: Long) {
-    val posts by viewModel.posts.collectAsState()
-    val post = posts.find { it.id == postID }
+fun <T:Item> LikeButton(viewModel: BaseFeedViewModel<T>, itemID: Long) {
+    val items by viewModel.feedState.collectAsState()
+    val item = items.item.find { it.id == itemID }
 
-    val isLiked = post?.likeOwnerIds?.contains(1) ?: false
-    val likesCount = post?.likeOwnerIds?.size ?: 0
+    val isLiked = item?.likeOwnerIds?.contains(1) ?: false
+    val likesCount = item?.likeOwnerIds?.size ?: 0
 
     Row(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                viewModel.likePost(postID)
+                viewModel.like(itemID)
             }
     ) {
         Icon(
@@ -46,7 +48,7 @@ fun LikeButton(viewModel: ViewModelCard, postID: Long) {
         Text(
             modifier = Modifier.align(Alignment.CenterVertically),
             color = Color(0xFF6750A4),
-            text = post?.likeOwnerIds?.size.toString()
+            text = item?.likeOwnerIds?.size.toString()
         )
     }
 }
