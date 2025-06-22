@@ -1,16 +1,50 @@
 package rus.one.app.profile
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import rus.one.app.R
-import java.util.Date
+import com.google.gson.annotations.SerializedName
 
 
 data class User(
     val id: Int,
     val avatar: String?,
     val name: String,
-    val login: String)
+    val login: String,
+    val token: String?,
+)
+
+
+data class RegistrationRequest(
+
+    @SerializedName("login") val login: String,
+    @SerializedName("pass") val password: String,
+    @SerializedName("name") val name: String,
+
+    )
+
+data class AuthenticationRequest(
+
+    @SerializedName("login") val login: String,
+    @SerializedName("pass") val password: String
+
+    )
+
+data class AuthResponse(
+    val userId: Long,
+    val token: String,
+    val avatar: String?,
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    val job: MutableList<Jobs>? = null,
 //    val friends: MutableList<User>? = null,

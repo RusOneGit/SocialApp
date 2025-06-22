@@ -31,8 +31,8 @@ import rus.one.app.viewmodel.BaseFeedViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  PostScreen(
-    viewModel: BaseFeedViewModel<Item>,
+fun <T : Item> PostScreen(
+    viewModel: BaseFeedViewModel<T>,
     paddingValues: PaddingValues,
     onClick: (Item) -> Unit,
 ) {

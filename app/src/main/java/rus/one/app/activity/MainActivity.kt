@@ -31,20 +31,24 @@ import rus.one.app.card.UserCard
 import rus.one.app.common.Item
 import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
+import rus.one.app.events.Event
 import rus.one.app.navigation.AppNavGraph
 import rus.one.app.navigation.NavigationItem
 import rus.one.app.navigation.rememberNavigationState
+import rus.one.app.posts.Post
 import rus.one.app.posts.PostScreen
 import rus.one.app.posts.ui.activity.NewPostActivity
 import rus.one.app.profile.UserViewModel
 import rus.one.app.viewmodel.BaseFeedViewModel
+import rus.one.app.viewmodel.EventViewModel
+import rus.one.app.viewmodel.PostViewModel
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val postViewModel: BaseFeedViewModel<Item> by viewModels()
-    private val eventViewModel: BaseFeedViewModel<Item> by viewModels()
+    private val postViewModel: PostViewModel by viewModels()
+    private val eventViewModel: EventViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
 
 
@@ -63,8 +67,8 @@ class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
-    postViewModel: BaseFeedViewModel<Item>,
-    eventViewModel: BaseFeedViewModel<Item>,
+    postViewModel: BaseFeedViewModel<Post>,
+    eventViewModel: BaseFeedViewModel<Event>,
     userViewModel: UserViewModel,
 ) {
     val navigationState = rememberNavigationState()

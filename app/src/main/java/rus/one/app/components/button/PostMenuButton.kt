@@ -12,7 +12,7 @@ import rus.one.app.viewmodel.PostViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ItemMenu(viewModel: BaseFeedViewModel<Item>, expanded: Boolean, onDismiss: () -> Unit, item: Item) {
+fun <T : Item> ItemMenu(viewModel: BaseFeedViewModel<T>, expanded: Boolean, onDismiss: () -> Unit, item: T) {
 
 
     // Выпадающее меню

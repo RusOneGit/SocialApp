@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import rus.one.app.common.FetchResult
-import rus.one.app.common.Item
 import rus.one.app.posts.Post
 import rus.one.app.posts.data.PostRepository
 import rus.one.app.state.FeedState

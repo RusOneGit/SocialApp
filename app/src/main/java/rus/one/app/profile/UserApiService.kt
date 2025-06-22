@@ -1,20 +1,27 @@
 package rus.one.app.profile
 
-import com.google.android.gms.identitycredentials.RegistrationRequest
-import com.google.android.gms.identitycredentials.RegistrationResponse
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface UserApiService {
-
+    @Multipart
     @POST("/api/users/registration")
-    suspend fun registerUser(@Body request: RegistrationRequest): RegistrationResponse
+    suspend fun registerUser(
+        @Query("login") login: String,
+        @Query("pass") pass: String,
+        @Query("name") name: String,
+        @Part file: MultipartBody.Part
+    ): AuthResponse
 
-//    @POST("/api/users/authentication")
-//    suspend fun authenticateUser(@Body request: AuthenticationRequest): AuthenticationResponse
+    @POST("/api/users/authentication")
+    suspend fun authenticateUser(@Body request: AuthenticationRequest): AuthResponse
 
     @GET("/api/users")
     suspend fun getUsers(): Response<List<User>>

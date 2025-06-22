@@ -31,7 +31,7 @@ import rus.one.app.viewmodel.BaseFeedViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HeadCard(viewModel: BaseFeedViewModel<Item>, item: Item) {
+fun <T : Item> HeadCard(viewModel: BaseFeedViewModel<T>, item: T) {
     val expanded = remember { mutableStateOf(false) }
 
     Row(

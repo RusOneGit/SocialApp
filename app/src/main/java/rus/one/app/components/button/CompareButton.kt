@@ -20,9 +20,9 @@ fun CompareButton(onClick: () -> Unit, password: TextFieldValue, confirmPassword
             if (password != confirmPassword) {
                 passwordError.value = "Пароли не совпадают"// Устанавливаем ошибку
             } else {
-                // Логика входа или регистрации
-                // Например, вызов API или переход на другой экран
+
                 passwordError.value = "" // Сбрасываем ошибку при успешной проверке
+                onClick()
             }
         }, modifier = Modifier.padding(8.dp)
     ) {

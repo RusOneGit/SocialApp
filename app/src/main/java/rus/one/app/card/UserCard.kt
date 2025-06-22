@@ -54,23 +54,3 @@ fun UserCard(user: User) {
     }
 }
 
-
-@Preview
-@Composable
-fun PreviewCardUser() {
-    val user = User(
-        id = 1,
-        avatar = null,
-        name = "Egor",
-        login = "Baracude"
-    )
-    Column{
-        UserCard(user)
-        UserCard(user)
-        UserCard(user)
-        UserCard(user)
-    }
-
-
-
-}

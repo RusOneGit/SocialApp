@@ -30,7 +30,8 @@ fun ButtonLogin(
                 // Логика авторизации
             }
         }, shape = RoundedCornerShape(20.dp), colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0x1D1B201F), contentColor = Color(0x1D1B201F)
+            containerColor = if (password.text.isEmpty()) Color(0x1D1B201F) else Color(0xFF6750A4),
+            contentColor = if (password.text.isEmpty()) Color(0x1D1B201F) else Color.White
         ), modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()

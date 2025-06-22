@@ -22,9 +22,9 @@ import rus.one.app.viewmodel.BaseFeedViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CardItem(
-    viewModel: BaseFeedViewModel<Item>,
-    item: Item,
+fun <T : Item> CardItem(
+    viewModel: BaseFeedViewModel<T>,
+    item: T,
     paddingValues: PaddingValues,
     onClick: (Item) -> Unit,
 ) {

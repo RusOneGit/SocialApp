@@ -10,7 +10,8 @@ data class UserEntity(
     val id: Int,
     val login: String,
     val avatar: String?,
-    val name: String
+    val name: String,
+    val token: String?
 
 ) {
     fun toDto(): User{
@@ -18,7 +19,8 @@ data class UserEntity(
             id = id,
             avatar = avatar,
             name = name,
-            login = login
+            login = login,
+            token = token
         )
     }
 
@@ -29,7 +31,8 @@ data class UserEntity(
                 id = dto.id,
                 login = dto.login,
                 avatar = dto.avatar,
-                name = dto.name
+                name = dto.name,
+                token = dto.token
             )
         }
 

@@ -87,7 +87,9 @@ fun Authorize() {
             )
 
             // Кнопка "Войти"
-            ButtonLogin(onClick = { // Проверка на пустой пароль
+            ButtonLogin(
+
+                onClick = { // Проверка на пустой пароль
                 if (passwordState.value.password.text.isEmpty()) {
                     passwordError.value = context.getString(R.string.password_empty)
                 } else {
