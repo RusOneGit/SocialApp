@@ -1,7 +1,6 @@
-package rus.one.app.posts.ui.activity
+package rus.one.app.activity
 
 
-import rus.one.app.posts.data.PostRepository
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,6 +11,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,9 +23,12 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import rus.one.app.R
+import rus.one.app.card.ContentCard
 import rus.one.app.card.HeadDetailsPost
+import rus.one.app.card.PostData
 import rus.one.app.components.bar.TopBar
 import rus.one.app.posts.Post
+import rus.one.app.posts.data.PostRepository
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,7 +59,7 @@ class PostDetailActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DetailPost(post: Post) {
-
+    val scrollState = rememberScrollState()
     val context = LocalContext.current
     Scaffold(
         topBar = {
@@ -65,12 +69,15 @@ fun DetailPost(post: Post) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color(0xFFFFFFFF)),
+                .background(Color(0xFFFFFFFF))
+                .verticalScroll(scrollState)
 
 
             ) {
 
             HeadDetailsPost(post)
+            PostData(post.published, Color(0xff49454F))
+            ContentCard(post.content, post.attachment, Color(0xff49454F))
 
     }
 }}

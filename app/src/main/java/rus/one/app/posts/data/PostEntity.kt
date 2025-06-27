@@ -10,7 +10,6 @@
     import rus.one.app.posts.Coords
     import rus.one.app.posts.Post
     import rus.one.app.profile.User
-    import java.time.format.DateTimeFormatter
 
     @Entity(tableName = "PostEntity")
     data class PostEntity(
@@ -52,7 +51,7 @@
                 id = id,
                 authorId = authorId,
                 author = authorName,
-                authorJob = authorJob.toString(),
+                authorJob = authorJob,
                 authorAvatar = authorAvatar,
                 content = content,
                 published = published,

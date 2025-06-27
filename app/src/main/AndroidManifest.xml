@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Для Android 12 и ниже -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!-- Для Android 13 и выше -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
@@ -31,7 +35,7 @@
 
 
         <activity
-            android:name=".posts.ui.activity.PostDetailActivity"
+            android:name=".activity.PostDetailActivity"
             android:exported="true"
             android:label="@string/post_details"
             android:theme="@style/Theme.SocialActivity">

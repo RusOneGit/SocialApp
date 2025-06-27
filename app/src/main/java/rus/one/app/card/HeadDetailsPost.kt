@@ -46,7 +46,7 @@ fun HeadDetailsPost(post: Post) {
             )
             Text(
                 modifier = Modifier.padding(4.dp),
-                text = post.authorJob ?: "",
+                text = post.authorJob ?: "В поиске работы",
                 color = Color(0xff1D1B20),
                 fontWeight = FontWeight(400),
                 fontSize = 14.sp

@@ -26,7 +26,7 @@ fun <T : Item> CardItem(
     viewModel: BaseFeedViewModel<T>,
     item: T,
     paddingValues: PaddingValues,
-    onClick: (Item) -> Unit,
+    onClick: (T) -> Unit,
 ) {
 
     Card(
@@ -35,7 +35,7 @@ fun <T : Item> CardItem(
             .padding(8.dp, top = 4.dp, bottom = 4.dp, end = 8.dp), // Общий отступ для карточки
 //        elevation = CardDefaults.cardElevation(8.dp),
         shape = RoundedCornerShape(12.dp),
-        onClick = { },
+        onClick = { onClick(item) },
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFEF7FF)),
         border = BorderStroke(1.dp, color = Color(0xFFCAC4D0))
     ) {
@@ -45,9 +45,10 @@ fun <T : Item> CardItem(
             is Post -> HeadCard(viewModel = viewModel, item = item)
             is Event -> InfoEvent(item.type, item.datetime)
         }
-        item.attachment?.let { ContentCard(content = item.content, it) }
+        ContentCard(content = item.content, attachment = item.attachment,Color(0xFF000000))
+    }
         StatPost(viewModel, item.id, item !is Post)
     }
-}
+
 
 

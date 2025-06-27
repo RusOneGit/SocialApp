@@ -1,15 +1,28 @@
 package rus.one.app.activity
 
+import android.Manifest
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,12 +30,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
+import coil.compose.rememberAsyncImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
 import rus.one.app.components.bar.TopBar
@@ -49,33 +69,69 @@ class RegisterActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun Register(userViewModel: UserViewModel) {
     var login = remember { mutableStateOf(TextFieldValue()) }
     var name = remember { mutableStateOf(TextFieldValue()) }
     var passwordState = remember { mutableStateOf(PassWordState()) }
-    var passwordError = remember { mutableStateOf("") }
     var passwordVisible = remember { mutableStateOf(false) }
     val registrationState by userViewModel.registrationState.collectAsState()
 
     val context = LocalContext.current
 
+    // Состояние для URI аватарки
+    var avatarUri by remember { mutableStateOf<Uri?>(null) }
+
+    // Launcher для выбора изображения из галереи
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { avatarUri = it }
+    }
+
+    // Launcher для запроса разрешения
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            pickImageLauncher.launch("image/*")
+        } else {
+            Toast.makeText(context, "Разрешение не предоставлено", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun checkPermissionAndPickImage() {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PermissionChecker.PERMISSION_GRANTED -> {
+                pickImageLauncher.launch("image/*")
+            }
+            else -> {
+                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+    }
+
     LaunchedEffect(registrationState) {
         when (registrationState) {
-            is RegistrationResult.Loading -> {
-                // Можно показать ProgressBar или что-то
-            }
+            is RegistrationResult.Loading -> { /* Можно показать индикатор загрузки */ }
             is RegistrationResult.Success -> {
                 Toast.makeText(context, "Регистрация успешна", Toast.LENGTH_SHORT).show()
-                // Закрываем экран регистрации
                 (context as? RegisterActivity)?.finish()
             }
             is RegistrationResult.Error -> {
-                val errorMessage = (registrationState as RegistrationResult.Error).message
-                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    (registrationState as RegistrationResult.Error).message,
+                    Toast.LENGTH_LONG
+                ).show()
             }
-            else -> { /* ничего */ }
+            else -> { }
         }
     }
 
@@ -83,66 +139,88 @@ fun Register(userViewModel: UserViewModel) {
         topBar = {
             TopBar(
                 title = stringResource(R.string.registration),
-                onBackClick = { (context as? RegisterActivity)?.finish() })
-        }) { paddingValues ->
+                onBackClick = { (context as? RegisterActivity)?.finish() }
+            )
+        }
+    ) { paddingValues ->
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CameraButton(R.drawable.ic_camera, stringResource(R.string.camera), onClick = {})
+            if (avatarUri == null) {
+                CameraButton(
+                    iconID = R.drawable.ic_camera,
+                    contentDescription = stringResource(R.string.camera),
+                    onClick = { checkPermissionAndPickImage() }
+                )
+            } else {
+                Image(
+                    painter = rememberAsyncImagePainter(avatarUri),
+                    contentDescription = "Выбранный аватар",
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(160.dp)
+                        .clip(RoundedCornerShape(50))
+                        .background(Color(0xFFC4C4C4))
+                        .clickable { checkPermissionAndPickImage() },
+                    contentScale = ContentScale.Crop
+                )
+            }
 
-            //поле ввода логина
+            Spacer(modifier = Modifier.height(16.dp))
+
             LoginField(
                 value = login.value,
-                onValueChange = { newValue -> login.value = newValue },
+                onValueChange = { login.value = it },
                 label = stringResource(R.string.login)
             )
-            //поле ввода имени
+
             NameField(
                 value = name.value,
-                onValueChange = { newValue -> name.value = newValue },
-                label = (stringResource(R.string.name))
+                onValueChange = { name.value = it },
+                label = stringResource(R.string.name)
             )
 
-
-            (
-                    //поле ввода пароля
-                    PasswordInputField(
-                        value = passwordState.value.password, onValueChange = {
-                            passwordState.value = passwordState.value.copy(password = it)
-                        }, labelResId = R.string.password, passwordVisible = passwordVisible
-                    ))
-
-
-            //поле повторного ввода пароля
             PasswordInputField(
-                value = passwordState.value.confirmPassword, onValueChange = {
-                    passwordState.value = passwordState.value.copy(confirmPassword = it)
-                }, labelResId = R.string.confirm_password, passwordVisible = passwordVisible
+                value = passwordState.value.password,
+                onValueChange = {
+                    passwordState.value = passwordState.value.copy(password = it)
+                },
+                labelResId = R.string.password,
+                passwordVisible = passwordVisible
             )
 
+            PasswordInputField(
+                value = passwordState.value.confirmPassword,
+                onValueChange = {
+                    passwordState.value = passwordState.value.copy(confirmPassword = it)
+                },
+                labelResId = R.string.confirm_password,
+                passwordVisible = passwordVisible
+            )
 
-            //кнопка входа
+            Spacer(modifier = Modifier.height(16.dp))
 
             CompareButton(
                 onClick = {
-                    userViewModel.registration(
-                        login = login.value.text,
-                        password = passwordState.value.password.text,
-                        name = name.value.text,
-                        context
-                    )
+                    avatarUri?.let {
+                        userViewModel.registration(
+                            login = login.value.text,
+                            password = passwordState.value.password.text,
+                            name = name.value.text,
+                            avatar = it, // может быть null
+                            contentResolver = context.contentResolver
+                        )
+                    }
                 },
                 passwordState.value.password,
                 passwordState.value.confirmPassword
             )
-
         }
     }
 }
-

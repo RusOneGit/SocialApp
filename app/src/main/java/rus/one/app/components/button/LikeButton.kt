@@ -44,6 +44,7 @@ fun <T:Item> LikeButton(viewModel: BaseFeedViewModel<T>, itemID: Long) {
             tint = Color(0xFF6750A4),
             painter = painterResource(if (isLiked == true) R.drawable.ic_like_on else R.drawable.ic_like_off),
             contentDescription = null
+
         )
         Text(
             modifier = Modifier.align(Alignment.CenterVertically),

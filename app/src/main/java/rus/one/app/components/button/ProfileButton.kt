@@ -21,6 +21,6 @@ fun ProfileButton(onClick: () -> Unit) {
         modifier = Modifier
             .padding(8.dp)
             .size(32.dp)
-            .clickable { onClick }
+            .clickable { onClick() }
     )
 }

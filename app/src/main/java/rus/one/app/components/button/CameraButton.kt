@@ -23,7 +23,8 @@ fun CameraButton(iconID: Int, contentDescription: String, onClick: () -> Unit) {
             .padding(16.dp)
             .size(160.dp)
             .clip(RoundedCornerShape(50))
-            .background(color = Color(0xFFC4C4C4)),
+            .background(color = Color(0xFFC4C4C4))
+            .clickable{ onClick()},
 
         Alignment.Center
     ) {
@@ -32,7 +33,6 @@ fun CameraButton(iconID: Int, contentDescription: String, onClick: () -> Unit) {
             contentDescription = contentDescription,
             modifier = Modifier
                 .size(80.dp)
-                .clickable {}
         )
     }
 }

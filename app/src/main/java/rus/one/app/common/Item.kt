@@ -8,7 +8,7 @@ interface Item {
     val id: Long
     val authorId: Int
     val author: String
-    val authorJob: String
+    val authorJob: String?
     val authorAvatar: String?// URL
     val content: String
     val published: String

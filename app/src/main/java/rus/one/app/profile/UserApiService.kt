@@ -2,7 +2,6 @@ package rus.one.app.profile
 
 import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -21,7 +20,11 @@ interface UserApiService {
     ): AuthResponse
 
     @POST("/api/users/authentication")
-    suspend fun authenticateUser(@Body request: AuthenticationRequest): AuthResponse
+    suspend fun authenticateUser(
+        @Query("login") login: String,
+        @Query("pass") pass: String,
+    ): AuthResponse
+
 
     @GET("/api/users")
     suspend fun getUsers(): Response<List<User>>

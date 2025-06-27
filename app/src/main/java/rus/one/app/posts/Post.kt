@@ -12,7 +12,7 @@ data class Post(
     override val id: Long,
     override val authorId: Int,
     override val author: String,
-    override val authorJob: String,
+    override val authorJob: String?,
     override val authorAvatar: String?, // URL
     override val content: String,
     override val published:  String,

@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import rus.one.app.R
 import rus.one.app.common.Item
 import rus.one.app.components.AuthorAvatar
-import rus.one.app.posts.Post
 import rus.one.app.util.formatIsoDate
 import rus.one.app.viewmodel.BaseFeedViewModel
 
@@ -45,13 +44,9 @@ fun <T : Item> HeadCard(viewModel: BaseFeedViewModel<T>, item: T) {
         Column(
             modifier = Modifier.weight(1f) // Занимает все доступное пространство
         ) {
-            Text(modifier = Modifier.padding(4.dp),
-                text = item.author, color = Color(0xff1D1B20), fontWeight = FontWeight(500), fontSize =  16.sp, letterSpacing = 0.15.sp, lineHeight = 24.sp
+            PostAuthorName(item.author)
+            PostData(item.published,  Color(0xff1D1B20))
 
-            )
-            Text( modifier = Modifier.padding(4.dp),
-                text = formatIsoDate(item.published), color = Color(0xff1D1B20), fontWeight = FontWeight(400), fontSize = 14.sp, letterSpacing = 0.25.sp, lineHeight = 20.sp
-            )
         }
 
         Icon(
@@ -66,6 +61,36 @@ fun <T : Item> HeadCard(viewModel: BaseFeedViewModel<T>, item: T) {
     }
 
     ItemMenu(viewModel = viewModel, expanded = expanded.value, onDismiss = { expanded.value = false }, item = item)
+
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun PostData(data: String, color: Color) {
+    Text(
+        modifier = Modifier.padding(4.dp),
+        text = formatIsoDate(data),
+        color = color ,
+        fontWeight = FontWeight(400),
+        fontSize = 14.sp,
+        letterSpacing = 0.25.sp,
+        lineHeight = 20.sp
+    )
+
+}
+
+@Composable
+fun PostAuthorName(author: String) {
+    Text(
+        modifier = Modifier.padding(4.dp),
+        text = author,
+        color = Color(0xff1D1B20),
+        fontWeight = FontWeight(500),
+        fontSize = 16.sp,
+        letterSpacing = 0.15.sp,
+        lineHeight = 24.sp
+
+    )
 
 }
 

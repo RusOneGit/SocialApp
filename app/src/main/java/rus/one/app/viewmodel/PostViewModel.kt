@@ -6,16 +6,20 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import rus.one.app.common.FetchResult
 import rus.one.app.posts.Post
 import rus.one.app.posts.data.PostRepository
+import rus.one.app.profile.UserRepository
 import rus.one.app.state.FeedState
 import javax.inject.Inject
 
@@ -23,11 +27,14 @@ import javax.inject.Inject
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val postRepository: PostRepository,
-
-    ) : BaseFeedViewModel<Post>() {
+    private val userRepository: UserRepository,
+) : BaseFeedViewModel<Post>() {
 
     private val _isLiked = MutableStateFlow<Map<Long, Boolean>>(emptyMap())
     val isLiked: StateFlow<Map<Long, Boolean>> = _isLiked
+
+    private val _uiMessage = MutableSharedFlow<String>()
+    val uiMessage = _uiMessage.asSharedFlow()
 
     override val feedState = MutableStateFlow(FeedState<Post>(loading = true))
     override fun load() {
@@ -92,6 +99,15 @@ class PostViewModel @Inject constructor(
 
 
     override fun like(postID: Long) {
+        viewModelScope.launch {
+            val token = userRepository.tokenFlow.first()
+            if (token.isBlank()) {
+                _uiMessage.emit("Ты не авторизован")
+            } else {
+                postRepository.likePost(postID) // предполагается, что такой метод есть
+                _uiMessage.emit("Лайк поставлен")
+            }
+        }
 
     }
 

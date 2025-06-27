@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -34,10 +35,11 @@ import rus.one.app.viewmodel.BaseFeedViewModel
 fun <T : Item> PostScreen(
     viewModel: BaseFeedViewModel<T>,
     paddingValues: PaddingValues,
-    onClick: (Item) -> Unit,
+    onClick: (T) -> Unit,
 ) {
     val feedState by viewModel.feedState.collectAsState()
     val pullRefreshState = rememberPullToRefreshState()
+    val listState = rememberLazyListState()
 
     PullToRefreshBox(
         isRefreshing = feedState.isRefreshing,
@@ -95,7 +97,7 @@ fun <T : Item> PostScreen(
                             viewModel = viewModel,
                             item = item,
                             paddingValues = paddingValues,
-                            onClick =  { }
+                            onClick =  { onClick(item)}
                         )
 
                     }
@@ -107,7 +109,7 @@ fun <T : Item> PostScreen(
     // Прокрутка до последнего поста после обновления
     LaunchedEffect(feedState.item) {
         if (feedState.item.isNotEmpty()) {
-            // Прокручиваем до самого верхнего элемента
+            listState.scrollToItem(0)
         }
     }
 }

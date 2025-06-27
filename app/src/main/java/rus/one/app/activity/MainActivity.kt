@@ -3,6 +3,7 @@ package rus.one.app.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,10 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
 import rus.one.app.card.UserCard
-import rus.one.app.common.Item
 import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
 import rus.one.app.events.Event
@@ -42,10 +44,12 @@ import rus.one.app.profile.UserViewModel
 import rus.one.app.viewmodel.BaseFeedViewModel
 import rus.one.app.viewmodel.EventViewModel
 import rus.one.app.viewmodel.PostViewModel
+import kotlin.jvm.java
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
 
     private val postViewModel: PostViewModel by viewModels()
     private val eventViewModel: EventViewModel by viewModels()
@@ -56,6 +60,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        lifecycleScope.launchWhenStarted {
+            postViewModel.uiMessage.collect { message ->
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
         setContent {
             MainScreen(postViewModel, eventViewModel, userViewModel)
 
@@ -92,7 +101,7 @@ fun MainScreen(
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFEF7FF)),
             title = { Text(stringResource(R.string.App_name)) },
-            actions = { ProfileButton(onClick = {}) })
+            actions = { ProfileButton(onClick = { userViewModel.authorization(login = "russone", password = "danilka95") }) })
     }, bottomBar = {
         BottomBarMain(
             items = listOf(
@@ -109,21 +118,26 @@ fun MainScreen(
                 PostScreen(
                     viewModel = postViewModel,
                     paddingValues = paddingValues,
-                    onClick = { }
+                    onClick = {
+                            item ->
+                        val post = item as? Post ?: return@PostScreen
+                        val intent = Intent(context, PostDetailActivity::class.java)
+                        intent.putExtra("postId", post.id)
+                        context.startActivity(intent)
+                    }
                 )
             },
             eventsScreenContent = {
                 PostScreen(
                     viewModel = eventViewModel,
                     paddingValues = paddingValues,
-                    onClick = { }
+                    onClick = {}
                 )
             },
             usersScreenContent = {
                 LazyColumn(
                     modifier = Modifier.padding(paddingValues)
                 ) {
-
                     items(users, key = { it.id }) { user ->
                         UserCard(user)
 
