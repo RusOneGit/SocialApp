@@ -31,7 +31,7 @@ fun HeadDetailsPost(post: Post) {
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically // Выравниваем элементы по центру
     ) {
-       AuthorAvatar(post.authorAvatar, post.author)
+       AuthorAvatar(modifier = Modifier,post.authorAvatar, post.author)
 
         Column(
             modifier = Modifier.weight(1f) // Занимает все доступное пространство
@@ -41,14 +41,17 @@ fun HeadDetailsPost(post: Post) {
                 text = post.author,
                 color = Color(0xff1D1B20),
                 fontWeight = FontWeight(500),
-                fontSize = 16.sp
-
+                fontSize = 16.sp,
+                lineHeight = 24.sp,
+                letterSpacing = 0.15.sp
             )
             Text(
                 modifier = Modifier.padding(4.dp),
                 text = post.authorJob ?: "В поиске работы",
                 color = Color(0xff1D1B20),
                 fontWeight = FontWeight(400),
+                lineHeight = 20.sp,
+                letterSpacing = 0.25.sp,
                 fontSize = 14.sp
             )
         }

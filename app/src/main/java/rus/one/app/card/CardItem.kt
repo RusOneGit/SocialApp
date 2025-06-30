@@ -27,6 +27,7 @@ fun <T : Item> CardItem(
     item: T,
     paddingValues: PaddingValues,
     onClick: (T) -> Unit,
+    currentUserId: Long
 ) {
 
     Card(
@@ -42,13 +43,15 @@ fun <T : Item> CardItem(
         // Применяем paddingValues к элементам внутри карточки
         Modifier.padding(paddingValues) // Применяем paddingValues к содержимому карточки
         when (item) {
-            is Post -> HeadCard(viewModel = viewModel, item = item)
+            is Post -> HeadCard(viewModel = viewModel, item = item, currentUserId = currentUserId)
             is Event -> InfoEvent(item.type, item.datetime)
         }
-        ContentCard(content = item.content, attachment = item.attachment,Color(0xFF000000))
-    }
+        ContentCardMedia(attachment = item.attachment)
+        ContentCardText(content = item.content,Color(0xFF000000))
         StatPost(viewModel, item.id, item !is Post)
     }
+
+}
 
 
 

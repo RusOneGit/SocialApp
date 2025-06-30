@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -25,18 +27,23 @@ class UserViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+
+
+    val token: StateFlow<String> = userRepository.tokenFlow
+        .stateIn(viewModelScope, SharingStarted.Eagerly, "")
+
+    val userId: StateFlow<Long> = userRepository.userIdFlow
+        .stateIn(viewModelScope, SharingStarted.Eagerly, 0L)
+
+    val isAuthorized: StateFlow<Boolean> = combine(token, userId) { token, userId ->
+        token.isNotBlank() && userId != 0L
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
     private val _registrationState = MutableStateFlow<RegistrationResult?>(null)
     val registrationState: StateFlow<RegistrationResult?> = _registrationState.asStateFlow()
 
     private val _authenticationState = MutableStateFlow<AuthenticationResult?>(null)
     val authenticationState: StateFlow<AuthenticationResult?> = _authenticationState.asStateFlow()
-
-
-    private val _token = MutableStateFlow<String?>(null)
-    val token: StateFlow<String?> = _token
-
-    private val _userId = MutableStateFlow<Long?>(null)
-    val userId: StateFlow<Long?> = _userId
 
 
     fun registration(
@@ -58,19 +65,6 @@ class UserViewModel @Inject constructor(
     }
 
     init {
-        userRepository.tokenFlow
-            .onEach { newToken ->
-                _token.value = if (newToken.isNotBlank()) newToken else null
-            }
-            .launchIn(viewModelScope)
-
-        // Подписываемся на изменения userId из DataStore
-        userRepository.userIdFlow
-            .onEach { newUserId ->
-                _userId.value = if (newUserId != 0L) newUserId else null
-            }
-            .launchIn(viewModelScope)
-
         getUsers()
     }
 
@@ -90,18 +84,11 @@ class UserViewModel @Inject constructor(
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    val users: StateFlow<List<User>> = userRepository.users.stateIn(
+    val users = userRepository.users.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
-    ).also {
-        viewModelScope.launch {
-            it.collect { list ->
-                Log.d("ViewModelCard", "События  обновились: ${list} штук")
-            }
-        }
-    }
-
+    )
 
     fun getUsers() {
         viewModelScope.launch {

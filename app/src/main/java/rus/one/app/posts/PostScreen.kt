@@ -4,6 +4,7 @@ package rus.one.app.posts
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import rus.one.app.card.CardItem
 import rus.one.app.common.Item
@@ -36,10 +38,13 @@ fun <T : Item> PostScreen(
     viewModel: BaseFeedViewModel<T>,
     paddingValues: PaddingValues,
     onClick: (T) -> Unit,
+    currentUserId: Long
 ) {
     val feedState by viewModel.feedState.collectAsState()
     val pullRefreshState = rememberPullToRefreshState()
     val listState = rememberLazyListState()
+
+
 
     PullToRefreshBox(
         isRefreshing = feedState.isRefreshing,
@@ -88,8 +93,11 @@ fun <T : Item> PostScreen(
 
             else -> {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = paddingValues
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White),
+                    contentPadding = paddingValues,
+
                 ) {
                     items(feedState.item, key = { it.id }) { item ->
 
@@ -97,7 +105,9 @@ fun <T : Item> PostScreen(
                             viewModel = viewModel,
                             item = item,
                             paddingValues = paddingValues,
-                            onClick =  { onClick(item)}
+                            onClick =  { onClick(item)},
+                            currentUserId = currentUserId
+
                         )
 
                     }

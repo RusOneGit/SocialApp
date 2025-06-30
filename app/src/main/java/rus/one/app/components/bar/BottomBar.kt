@@ -32,11 +32,12 @@ fun BottomBarMain(
 
 
 
-    NavigationBar {
+    NavigationBar(containerColor = Color(0xFFF3EDF7)) {
 
         items.forEachIndexed { index, item ->
 
             NavigationBarItem(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp),

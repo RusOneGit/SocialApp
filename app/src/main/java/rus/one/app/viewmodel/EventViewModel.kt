@@ -87,6 +87,10 @@ class EventViewModel @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override fun delete(item: Event) {
+        TODO("Not yet implemented")
+    }
+
     override fun load() {
         if (feedState.value.isRefreshing) return
         feedState.update {

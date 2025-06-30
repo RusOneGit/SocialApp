@@ -122,6 +122,13 @@ class PostViewModel @Inject constructor(
         }
     }
 
+    override fun delete(item: Post) {
+        viewModelScope.launch {
+            postRepository.deletePost(item)
+        }
+    }
+
+
     override fun refresh() {
 
 
@@ -190,11 +197,7 @@ class PostViewModel @Inject constructor(
 
 
 
-        fun delete(post: Post) {
-            viewModelScope.launch {
-                postRepository.deletePost(post)
-            }
-        }
+
 
         fun getPosts() {
             viewModelScope.launch {

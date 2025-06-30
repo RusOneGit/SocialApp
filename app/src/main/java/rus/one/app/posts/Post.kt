@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 
 data class Post(
     override val id: Long,
-    override val authorId: Int,
+    override val authorId: Long,
     override val author: String,
     override val authorJob: String?,
     override val authorAvatar: String?, // URL

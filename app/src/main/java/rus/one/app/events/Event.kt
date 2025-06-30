@@ -7,7 +7,7 @@ import rus.one.app.profile.User
 
 data class Event(
     override val id: Long,
-    override val authorId: Int,
+    override val authorId: Long,
     override val author: String,
     override val authorJob: String,
     override val authorAvatar: String?, // URL

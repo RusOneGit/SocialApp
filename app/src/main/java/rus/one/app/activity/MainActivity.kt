@@ -1,17 +1,22 @@
 package rus.one.app.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -21,6 +26,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
 import rus.one.app.card.UserCard
+import rus.one.app.common.Item
 import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
 import rus.one.app.events.Event
@@ -44,6 +52,7 @@ import rus.one.app.profile.UserViewModel
 import rus.one.app.viewmodel.BaseFeedViewModel
 import rus.one.app.viewmodel.EventViewModel
 import rus.one.app.viewmodel.PostViewModel
+import androidx.compose.runtime.getValue
 import kotlin.jvm.java
 
 
@@ -56,6 +65,7 @@ class MainActivity : ComponentActivity() {
     private val userViewModel: UserViewModel by viewModels()
 
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +76,9 @@ class MainActivity : ComponentActivity() {
             }
         }
         setContent {
-            MainScreen(postViewModel, eventViewModel, userViewModel)
+
+            val currentUserId by userViewModel.userId.collectAsState(initial = 0)
+            MainScreen(postViewModel, eventViewModel, userViewModel, currentUserId)
 
         }
     }
@@ -79,6 +91,7 @@ fun MainScreen(
     postViewModel: BaseFeedViewModel<Post>,
     eventViewModel: BaseFeedViewModel<Event>,
     userViewModel: UserViewModel,
+    currentUserId: Long
 ) {
     val navigationState = rememberNavigationState()
 
@@ -86,6 +99,8 @@ fun MainScreen(
 
     val userState = userViewModel.users.collectAsState()
     val users = userState.value
+
+    val expanded = remember { mutableStateOf(false) }
 
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = {
@@ -101,7 +116,7 @@ fun MainScreen(
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFEF7FF)),
             title = { Text(stringResource(R.string.App_name)) },
-            actions = { ProfileButton(onClick = { userViewModel.authorization(login = "russone", password = "danilka95") }) })
+            actions = { ProfileButton(onClick = {  expanded.value = true }) })
     }, bottomBar = {
         BottomBarMain(
             items = listOf(
@@ -124,14 +139,16 @@ fun MainScreen(
                         val intent = Intent(context, PostDetailActivity::class.java)
                         intent.putExtra("postId", post.id)
                         context.startActivity(intent)
-                    }
+                    },
+                    currentUserId = currentUserId
                 )
             },
             eventsScreenContent = {
                 PostScreen(
                     viewModel = eventViewModel,
                     paddingValues = paddingValues,
-                    onClick = {}
+                    onClick = {},
+                    currentUserId = currentUserId
                 )
             },
             usersScreenContent = {
@@ -146,8 +163,54 @@ fun MainScreen(
 
             }
         )
+
+        AuthMenu(userViewModel, expanded = expanded.value, onDismiss =  {expanded.value = false} ,context)
     }
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun AuthMenu(viewModel: UserViewModel, expanded: Boolean, onDismiss: () -> Unit, context: Context) {
+    // Получаем токен и userId из viewModel
+    val token by viewModel.token.collectAsState()
+    val userId by viewModel.userId.collectAsState()
+
+    val isAuthorized by viewModel.isAuthorized.collectAsState()
+
+    Log.d("AuthMenu", "token = $token, userId = $userId, isAuthorized = $isAuthorized")
+
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismiss
+    ) {
+        if (isAuthorized) {
+            DropdownMenuItem(
+                text = { Text("Выйти") },
+                onClick = {
+                    onDismiss()
+                    viewModel.logout()
+                    Toast.makeText(context, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show()
+                }
+            )
+        } else {
+            DropdownMenuItem(
+                text = { Text("Авторизоваться") },
+                onClick = {
+                    onDismiss()
+                    val intent = Intent(context, AuthorizeActivity::class.java)
+                    context.startActivity(intent)
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Зарегистрироваться") },
+                onClick = {
+                    onDismiss()
+                    val intent = Intent(context, RegisterActivity::class.java)
+                    context.startActivity(intent)
+                }
+            )
+        }
+    }
+}
 

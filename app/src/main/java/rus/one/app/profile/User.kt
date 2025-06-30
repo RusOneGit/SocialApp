@@ -28,6 +28,7 @@ data class AuthenticationRequest(
     )
 
 data class AuthResponse(
+    @SerializedName("id")
     val userId: Long,
     val token: String,
     val avatar: String?,

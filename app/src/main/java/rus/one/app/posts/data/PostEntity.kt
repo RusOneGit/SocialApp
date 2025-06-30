@@ -16,7 +16,7 @@
         @PrimaryKey(autoGenerate = true)
         val id: Long = 0,
 
-        val authorId: Int,
+        val authorId: Long,
         val authorName: String,
         val authorJob: String?,
         val authorAvatar: String?, // URL

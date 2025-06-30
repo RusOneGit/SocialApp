@@ -4,19 +4,19 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import rus.one.app.common.Item
-import rus.one.app.posts.Post
 import rus.one.app.viewmodel.BaseFeedViewModel
-import rus.one.app.viewmodel.PostViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun <T : Item> ItemMenu(viewModel: BaseFeedViewModel<T>, expanded: Boolean, onDismiss: () -> Unit, item: T) {
+fun <T : Item> PostMenuButton(viewModel: BaseFeedViewModel<T>, expanded: Boolean, onDismiss: () -> Unit, item: T,  modifier: Modifier = Modifier) {
 
 
     // Выпадающее меню
     DropdownMenu(
+        modifier = modifier,
         expanded = expanded,
         onDismissRequest = onDismiss // Закрытие меню при нажатии вне его
     ) {
@@ -24,7 +24,7 @@ fun <T : Item> ItemMenu(viewModel: BaseFeedViewModel<T>, expanded: Boolean, onDi
             text = { Text("Удалить") }, // Указываем текст для первого элемента
             onClick = {
                 onDismiss() // Закрываем меню
-//                viewModel.delete(post) // Ваше действие
+              viewModel.delete(item)
             }
         )
 

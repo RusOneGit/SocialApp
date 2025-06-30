@@ -42,7 +42,7 @@ fun UserCard(user: User) {
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AuthorAvatar(user.avatar, user.name)
+            AuthorAvatar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),  user.avatar, user.name)
 
             Column() {
                 Text(modifier = Modifier.padding(start = 8.dp, 4.dp), color = Color(0xff1D1B20), text = user.name, fontWeight = FontWeight(500), fontSize =  16.sp, letterSpacing = 0.15.sp, lineHeight = 24.sp)

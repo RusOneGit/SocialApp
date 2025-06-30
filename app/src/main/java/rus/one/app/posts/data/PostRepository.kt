@@ -106,6 +106,7 @@ class PostRepository @Inject constructor(
 
     suspend fun deletePost(post: Post) {
         postDao.removeById(post.id)
+        postApiService.removeByID(post.id)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

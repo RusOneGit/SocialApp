@@ -27,7 +27,6 @@ class UserRepository @Inject constructor(
     private val userApiService: UserApiService,
     private val userDao: UserDao,
     @ApplicationContext context: Context,
-    private val userPreferences: UserPreferences,
 ) {
 
     private val dataStore = context.dataStore
@@ -42,6 +41,7 @@ class UserRepository @Inject constructor(
 
     val userIdFlow: Flow<Long> = dataStore.data
         .map { prefs -> prefs[USER_ID_KEY] ?: 0L }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     val users: Flow<List<User>> = userDao.getAll()

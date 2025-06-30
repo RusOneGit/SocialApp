@@ -6,7 +6,7 @@ import rus.one.app.profile.User
 
 interface Item {
     val id: Long
-    val authorId: Int
+    val authorId: Long
     val author: String
     val authorJob: String?
     val authorAvatar: String?// URL

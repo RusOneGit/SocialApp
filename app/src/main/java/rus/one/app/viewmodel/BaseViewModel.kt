@@ -12,4 +12,5 @@ abstract class BaseFeedViewModel<Item> : ViewModel() {
     abstract fun like(itemID: Long)
     abstract fun add(item: Item)
     abstract fun edit(item: Item)
+    abstract fun delete(item: Item)
 }
