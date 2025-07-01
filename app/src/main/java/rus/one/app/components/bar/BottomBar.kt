@@ -1,5 +1,6 @@
 package rus.one.app.components.bar
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,10 +9,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -19,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
+import kotlinx.coroutines.launch
 import rus.one.app.navigation.NavigationItem
 import rus.one.app.navigation.NavigationState
 import rus.one.app.posts.Attachments
@@ -66,8 +72,11 @@ fun BottomBarMain(
 }
 
 @Composable
-fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<Attachments>) {
+fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<Attachments>, onItemClick: (Attachments) -> Unit) {
+
+
     NavigationBar {
+
         Row(
             modifier = Modifier.fillMaxWidth(0.5f),
             horizontalArrangement = Arrangement.Start // Смещение влево
@@ -78,6 +87,9 @@ fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<Attach
                     selected = selectedItemPosition.value == index,
                     onClick = {
                         selectedItemPosition.value = index
+                        onItemClick(item)
+
+
                     },
                     icon = {
                         Icon(ImageVector.vectorResource(item.icon), contentDescription = null)
@@ -86,7 +98,7 @@ fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<Attach
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color(0xFF1D1B20),
                         selectedTextColor = Color(0xFF1D1B20),
-                        indicatorColor = Color.Transparent,
+                        indicatorColor = Color(0xFFE8DEF8),
                         unselectedIconColor = Color(0xFF49454F),
                         unselectedTextColor = Color(0xFF49454F)
                     )

@@ -1,34 +1,49 @@
 package rus.one.app.posts.ui.activity
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
 import rus.one.app.components.bar.BottomBarNewPost
 import rus.one.app.components.bar.TopBar
+import rus.one.app.posts.Attachment
 import rus.one.app.posts.Attachments
+import rus.one.app.posts.Coords
 import rus.one.app.posts.Post
 
 import rus.one.app.viewmodel.PostViewModel
@@ -55,6 +70,28 @@ class NewPostActivity : ComponentActivity() {
         val context = LocalContext.current
         val selectedItemPosition = remember { mutableStateOf(0) }
 
+        var photoUri by remember { mutableStateOf<Uri?>(null) }
+        var attachmentUri by remember { mutableStateOf<Uri?>(null) }
+        var selectedUsers by remember { mutableStateOf<List<String>>(emptyList()) }
+        var coords by remember { mutableStateOf<Coords?>(null) }
+
+        val pickImageLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent()
+        ) { uri -> uri?.let { photoUri = it } }
+
+        val pickAttachmentLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent()
+        ) { uri -> uri?.let { attachmentUri = it } }
+
+        fun openUserSelection() {
+            // TODO: реализуйте выбор пользователей
+        }
+
+        fun openLocationPicker() {
+            // TODO: реализуйте выбор координат
+        }
+
+
 
         Scaffold(topBar = {
             TopBar(
@@ -76,7 +113,7 @@ class NewPostActivity : ComponentActivity() {
                         mentionedMe = false,
                         likeOwnerIds = null,
                         likedByMe = false,
-                        attachment = null,
+                        attachment = Attachment(photoUri.toString(), "IMAGE" ),
                         users = null
                     )
                     viewModel.add(post)
@@ -96,13 +133,23 @@ class NewPostActivity : ComponentActivity() {
                     Attachments.Attachment,
                     Attachments.UsersNoTitle,
                     Attachments.Location
-                )
+                ),
+                onItemClick = { attachment ->
+                    when (attachment) {
+                        Attachments.Photo -> pickImageLauncher.launch("image/*")
+                        Attachments.Attachment -> pickAttachmentLauncher.launch("*/*")
+                        Attachments.UsersNoTitle -> openUserSelection()
+                        Attachments.Location -> openLocationPicker()
+                    }
+                }
             )
 
         }
 
 
         ) { paddingValues ->
+
+
             TextField(
                 value = message.value,
                 onValueChange = { text -> message.value = text },
@@ -127,6 +174,20 @@ class NewPostActivity : ComponentActivity() {
                 )
 
             )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            photoUri?.let { uri ->
+                Image(
+                    painter = rememberAsyncImagePainter(uri),
+                    contentDescription = "Выбранное фото",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
+
+            }
         }
 
     }
