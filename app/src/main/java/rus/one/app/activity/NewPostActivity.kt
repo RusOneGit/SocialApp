@@ -14,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -163,62 +164,66 @@ class NewPostActivity : ComponentActivity() {
 
 
         ) { paddingValues ->
-
-            TextField(
-                value = message.value,
-                onValueChange = { text -> message.value = text },
-                maxLines = 20,
-                modifier = Modifier
-                    .fillMaxWidth(), // занимает всё свободное пространство сверху
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedTextColor = Color.Black,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                textStyle = TextStyle(
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                    letterSpacing = 0.25.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight(400)
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            photoUri?.let { uri ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
-                ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(uri),
-                        contentDescription = "Выбранное фото",
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(8.dp)),
-                        contentScale = ContentScale.Crop
+            Column(   modifier = Modifier
+                .fillMaxWidth()
+                .padding(paddingValues)
+                .padding(16.dp)) {
+                TextField(
+                    value = message.value,
+                    onValueChange = { text -> message.value = text },
+                    maxLines = 20,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedTextColor = Color.Black,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    textStyle = TextStyle(
+                        lineHeight = 20.sp,
+                        fontSize = 14.sp,
+                        letterSpacing = 0.25.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight(400)
                     )
+                )
 
-                    IconButton(
-                        onClick = { photoUri = null },
+                Spacer(modifier = Modifier.height(16.dp))
+
+                photoUri?.let { uri ->
+                    Box(
                         modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(8.dp)
-                            .size(24.dp)
+                            .fillMaxWidth()
+                            .height(250.dp)
                     ) {
-                        androidx.compose.material3.Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Удалить фото",
-                            tint = Color.White
+                        Image(
+                            painter = rememberAsyncImagePainter(uri),
+                            contentDescription = "Выбранное фото",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.Crop
                         )
+
+                        IconButton(
+                            onClick = { photoUri = null },
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(8.dp)
+                                .size(24.dp)
+                        ) {
+                            androidx.compose.material3.Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Удалить фото",
+                                tint = Color.White
+                            )
+                        }
                     }
                 }
             }
+            }
 
-        }
+
     }
 
 fun copyUriToFile(context: Context, uri: Uri): File? {
