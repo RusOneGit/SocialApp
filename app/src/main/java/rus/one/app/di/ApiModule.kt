@@ -8,15 +8,16 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import rus.one.app.posts.data.PostApiService
 import rus.one.app.BuildConfig
 import rus.one.app.api.ApiKeyInterceptor
 import rus.one.app.api.AuthorizationInterceptor
+import rus.one.app.api.TokenProvider
 import rus.one.app.events.data.EventApiService
+import rus.one.app.posts.data.PostApiService
 import rus.one.app.profile.UserApiService
-import javax.inject.Singleton
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -29,18 +30,17 @@ object ApiModule {
     @Named("apiKey")
     fun provideApiKey(): String = BuildConfig.API_KEY
 
-    @Provides
-    @Singleton
-    @Named("authToken")
-    fun provideAuthKey(): String = BuildConfig.AUTH_TOKEN
+    // Удаляем provideAuthKey — токен теперь динамический
 
     @Provides
     @Singleton
-    fun provideOkHttpClient( @Named("apiKey") apiKey: String,
-                             @Named("authToken") authToken: String): OkHttpClient {
+    fun provideOkHttpClient(
+        @Named("apiKey") apiKey: String,
+        tokenProvider: TokenProvider, // Инжектируем провайдера токена
+    ): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .addInterceptor(ApiKeyInterceptor(apiKey))
-            .addInterceptor(AuthorizationInterceptor(authToken))
+            .addInterceptor(AuthorizationInterceptor(tokenProvider)) // передаем провайдера
             .connectTimeout(30, TimeUnit.SECONDS)
 
         if (BuildConfig.DEBUG) {
@@ -65,12 +65,10 @@ object ApiModule {
     fun providePostApiService(retrofit: Retrofit): PostApiService =
         retrofit.create(PostApiService::class.java)
 
-
     @Provides
     @Singleton
     fun provideEventApiService(retrofit: Retrofit): EventApiService =
         retrofit.create(EventApiService::class.java)
-
 
     @Provides
     @Singleton

@@ -11,7 +11,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,6 +25,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -34,26 +34,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
 import rus.one.app.card.UserCard
-import rus.one.app.common.Item
 import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
-import rus.one.app.events.Event
 import rus.one.app.navigation.AppNavGraph
 import rus.one.app.navigation.NavigationItem
 import rus.one.app.navigation.rememberNavigationState
 import rus.one.app.posts.Post
 import rus.one.app.posts.PostScreen
-import rus.one.app.posts.ui.activity.NewPostActivity
+import rus.one.app.posts.ui.activity.NewPost
 import rus.one.app.profile.UserViewModel
-import rus.one.app.viewmodel.BaseFeedViewModel
 import rus.one.app.viewmodel.EventViewModel
 import rus.one.app.viewmodel.PostViewModel
-import androidx.compose.runtime.getValue
-import kotlin.jvm.java
 
 
 @AndroidEntryPoint
@@ -78,6 +73,9 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val currentUserId by userViewModel.userId.collectAsState(initial = 0)
+
+            Log.d("PostSending", "currentUser: $currentUserId")
+
             MainScreen(postViewModel, eventViewModel, userViewModel, currentUserId)
 
         }
@@ -88,12 +86,14 @@ class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
-    postViewModel: BaseFeedViewModel<Post>,
-    eventViewModel: BaseFeedViewModel<Event>,
+    postViewModel: PostViewModel,
+    eventViewModel: EventViewModel,
     userViewModel: UserViewModel,
-    currentUserId: Long
+    currentUserId: Long,
 ) {
     val navigationState = rememberNavigationState()
+    val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     val context = LocalContext.current
 
@@ -104,8 +104,11 @@ fun MainScreen(
 
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = {
-            val intent = Intent(context, NewPostActivity::class.java)
-            context.startActivity(intent)
+            when (currentRoute) {
+                NavigationItem.Posts.screen.route -> navigationState.navHostController.navigate("new_post")
+                NavigationItem.Events.screen.route -> navigationState.navHostController.navigate("new_event")
+                else -> navigationState.navHostController.navigate("new_post")
+            }
         }) {
             Icon(
                 painter = painterResource(R.drawable.ic_add),
@@ -161,6 +164,21 @@ fun MainScreen(
                     }
                 }
 
+            },
+            newPostScreen = {
+                NewPost(
+                    viewModel = postViewModel,
+                    userViewModel = userViewModel,
+                    onClose = { navigationState.navHostController.popBackStack() }
+                )
+
+            },
+            newEventScreen = {
+                NewPost(
+                    viewModel = eventViewModel,
+                    userViewModel = userViewModel,
+                    onClose = { navigationState.navHostController.popBackStack() }
+                )
             }
         )
 

@@ -25,6 +25,7 @@ roomCommonJvm = "2.7.1"
 roomRuntimeAndroid = "2.7.1"
 playServicesIdentityCredentials = "16.0.0-alpha08"
 playServicesCastFramework = "22.1.0"
+playServicesFido = "21.2.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -69,6 +70,7 @@ androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", 
 androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 play-services-identity-credentials = { group = "com.google.android.gms", name = "play-services-identity-credentials", version.ref = "playServicesIdentityCredentials" }
 play-services-cast-framework = { group = "com.google.android.gms", name = "play-services-cast-framework", version.ref = "playServicesCastFramework" }
+play-services-fido = { group = "com.google.android.gms", name = "play-services-fido", version.ref = "playServicesFido" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

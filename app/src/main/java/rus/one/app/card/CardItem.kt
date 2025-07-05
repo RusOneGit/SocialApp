@@ -42,8 +42,8 @@ fun <T : Item> CardItem(
     ) {
         // Применяем paddingValues к элементам внутри карточки
         Modifier.padding(paddingValues) // Применяем paddingValues к содержимому карточки
+        HeadCard(viewModel = viewModel, item = item, currentUserId = currentUserId)
         when (item) {
-            is Post -> HeadCard(viewModel = viewModel, item = item, currentUserId = currentUserId)
             is Event -> InfoEvent(item.type, item.datetime)
         }
         ContentCardMedia(attachment = item.attachment)

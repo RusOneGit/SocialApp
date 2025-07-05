@@ -13,7 +13,7 @@ class ApiKeyInterceptor(private val apiKey: String) : Interceptor {
             .build()
 
         Log.d("ApiKeyInterceptor", "Api-Key header added: ${newRequest.header("Api-Key")}")
-        Log.d("ApiKeyInterceptor", "Full request: ${newRequest.toString()}")
+        Log.d("ApiKeyInterceptor", "Full request: ${newRequest}")
 
         return chain.proceed(newRequest)
     }

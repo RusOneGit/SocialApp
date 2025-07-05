@@ -19,7 +19,7 @@ sealed class Attachments( val icon: Int) {
         icon = R.drawable.ic_camera
     )
 
-    object Attachment: Attachments(
+    object Attach: Attachments(
         icon = R.drawable.ic_attach
     )
 

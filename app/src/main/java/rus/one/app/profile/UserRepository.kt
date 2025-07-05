@@ -6,9 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +14,6 @@ import kotlinx.coroutines.flow.map
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import rus.one.app.util.dataStore
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,21 +23,14 @@ class UserRepository @Inject constructor(
     private val userApiService: UserApiService,
     private val userDao: UserDao,
     @ApplicationContext context: Context,
+    private val userPreferences: UserPreferences,
 ) {
 
-    private val dataStore = context.dataStore
 
-    companion object {
-        private val TOKEN_KEY = stringPreferencesKey("token")
-        private val USER_ID_KEY = longPreferencesKey("user_id")
-    }
 
-    val tokenFlow: Flow<String> = dataStore.data
-        .map { prefs -> prefs[TOKEN_KEY] ?: "" }
+    val tokenFlow: Flow<String> = userPreferences.tokenFlow
 
-    val userIdFlow: Flow<Long> = dataStore.data
-        .map { prefs -> prefs[USER_ID_KEY] ?: 0L }
-
+    val userIdFlow: Flow<Long> = userPreferences.userIdFlow
 
     @RequiresApi(Build.VERSION_CODES.O)
     val users: Flow<List<User>> = userDao.getAll()
@@ -98,18 +87,17 @@ class UserRepository @Inject constructor(
     suspend fun authentication(login: String, password: String): AuthResponse {
         val authResponse = userApiService.authenticateUser(login = login, pass = password)
 
-        dataStore.edit { prefs ->
-            prefs[TOKEN_KEY] = authResponse.token
-            prefs[USER_ID_KEY] = authResponse.userId
-        }
+        userPreferences.saveAuthData(authResponse.token, authResponse.userId)
+
+        Log.d("PostSending", "Sending post with token=${authResponse.token} userId=${authResponse.userId}")
+
+
+
 
         return authResponse
     }
 
     suspend fun clearAuthData() {
-        dataStore.edit { prefs ->
-            prefs.remove(TOKEN_KEY)
-            prefs.remove(USER_ID_KEY)
-        }
+        userPreferences.clearAuthData()
     }
 }

@@ -78,7 +78,7 @@ fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<Attach
     NavigationBar {
 
         Row(
-            modifier = Modifier.fillMaxWidth(0.5f),
+            modifier = Modifier.padding(start =  16.dp).fillMaxWidth(0.5f),
             horizontalArrangement = Arrangement.Start // Смещение влево
         ) {
             items.forEachIndexed { index, item ->
@@ -98,7 +98,7 @@ fun BottomBarNewPost(selectedItemPosition: MutableState<Int>, items: List<Attach
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color(0xFF1D1B20),
                         selectedTextColor = Color(0xFF1D1B20),
-                        indicatorColor = Color(0xFFE8DEF8),
+                        indicatorColor = Color.Transparent,
                         unselectedIconColor = Color(0xFF49454F),
                         unselectedTextColor = Color(0xFF49454F)
                     )

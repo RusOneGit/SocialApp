@@ -80,7 +80,9 @@ class EventViewModel @Inject constructor(
     }
 
     override fun add(item: Event) {
-        TODO("Not yet implemented")
+       viewModelScope.launch {
+           eventRepository.addEvent(item as Event)
+       }
     }
 
     override fun edit(item: Event) {
@@ -88,7 +90,8 @@ class EventViewModel @Inject constructor(
     }
 
     override fun delete(item: Event) {
-        TODO("Not yet implemented")
+        viewModelScope.launch {  eventRepository.deleteEvent(item) }
+
     }
 
     override fun load() {

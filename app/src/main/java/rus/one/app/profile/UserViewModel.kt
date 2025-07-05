@@ -29,11 +29,14 @@ class UserViewModel @Inject constructor(
 
 
 
+
+
     val token: StateFlow<String> = userRepository.tokenFlow
         .stateIn(viewModelScope, SharingStarted.Eagerly, "")
 
     val userId: StateFlow<Long> = userRepository.userIdFlow
         .stateIn(viewModelScope, SharingStarted.Eagerly, 0L)
+
 
     val isAuthorized: StateFlow<Boolean> = combine(token, userId) { token, userId ->
         token.isNotBlank() && userId != 0L
@@ -65,6 +68,11 @@ class UserViewModel @Inject constructor(
     }
 
     init {
+        viewModelScope.launch {
+            userId.collect { id ->
+                Log.d("UserViewModel", "Current userId = $id")
+            }
+        }
         getUsers()
     }
 

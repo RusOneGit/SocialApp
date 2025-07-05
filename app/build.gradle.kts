@@ -38,13 +38,11 @@ android {
             )
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
             buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "c1378193-bc0e-42c8-a502-b8d66d189617"}\"")
-            buildConfigField("String", "AUTH_TOKEN", "\"${project.findProperty("AUTH_TOKEN") ?: "G05lreGid+fiBT5vQmM7qZVHw93aZnvbSBJQkDUtcftX/8B1ZmHKJXI1vlibkWVlWml98XxnGE5nyu3+aBvWswGehVK6IKIuYKSi7bSf907iFXDEC+h7iWcrezRGlgTx/2anIwG+lBbqtKl0I4BIqD2CgW1tExI5+sfpaLZTT/M"}\"")
         }
 
         debug {
             buildConfigField("String", "BASE_URL", "\"http://94.228.125.136:8080/\"")
             buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: "c1378193-bc0e-42c8-a502-b8d66d189617"}\"")
-            buildConfigField("String", "AUTH_TOKEN", "\"${project.findProperty("AUTH_TOKEN") ?: "G05lreGid+fiBT5vQmM7qZVHw93aZnvbSBJQkDUtcftX/8B1ZmHKJXI1vlibkWVlWml98XxnGE5nyu3+aBvWswGehVK6IKIuYKSi7bSf907iFXDEC+h7iWcrezRGlgTx/2anIwG+lBbqtKl0I4BIqD2CgW1tExI5+sfpaLZTT/M"}\"")
         }
     }
 
@@ -71,7 +69,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)   // Основная библиотека Room
     implementation(libs.androidx.room.ktx)
     implementation(libs.play.services.identity.credentials)
-    implementation(libs.play.services.cast.framework)       // KTX для Room
+    implementation(libs.play.services.cast.framework)
+    implementation(libs.play.services.fido)       // KTX для Room
     kapt(libs.androidx.room.compiler)            // Компилятор для Room
     implementation("androidx.room:room-runtime:2.7.1")
     implementation("androidx.room:room-ktx:2.7.1")

@@ -3,14 +3,18 @@ package rus.one.app.events.data
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import rus.one.app.events.Event
 import rus.one.app.events.EventEntity
+import rus.one.app.posts.data.PostEntity
+import rus.one.app.posts.data.PostRepository.FetchResult
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.map
 
 @Singleton
 class EventRepository @Inject constructor(
@@ -58,17 +62,23 @@ class EventRepository @Inject constructor(
     suspend fun addEvent(event: Event) {
         try {
             val response = eventApiService.save(event)
+            val gson = GsonBuilder()
+                .setPrettyPrinting() // для красивого форматирования
+                .create()
+
+            val eventJson = gson.toJson(event)
+            Log.d("DEBUG_JSON", eventJson)
             if (response.isSuccessful) {
                 response.body()?.let { newEvent ->
-                    // TODO: Обновить локальное событие с новым ID
+                    //  TODO:  Обновить локальный пост с новым ID
                 }
             } else {
-                Log.e("EventRepository", "Ошибка API при добавлении события: ${response.code()}")
-                // TODO: Передать ошибку в ViewModel
+                Log.e("PostRepository", "Ошибка API при добавлении события: ${response.code()}")
+                //  TODO:  Передать ошибку в ViewModel
             }
         } catch (e: Exception) {
-            Log.e("EventRepository", "Ошибка при добавлении события: ${e.message}")
-            // TODO: Передать ошибку в ViewModel
+            Log.e("PostRepository", "Ошибка при добавлении события: ${e.message}")
+            //  TODO:  Передать ошибку в ViewModel
         }
     }
 
@@ -83,6 +93,7 @@ class EventRepository @Inject constructor(
     }
 
     suspend fun deleteEvent(event: Event) {
+        eventApiService.removeByID(event.id)
         eventDao.removeById(event.id)
     }
 
