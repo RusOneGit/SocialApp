@@ -64,6 +64,8 @@ android {
 
 dependencies {
     // Основные зависимости
+    implementation("androidx.compose.material3:material3:1.3.2")
+    implementation("androidx.compose.material3:material3-window-size-class:1.3.2")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation(libs.androidx.room.runtime)   // Основная библиотека Room

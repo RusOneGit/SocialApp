@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,6 +35,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -95,7 +96,8 @@ fun <T : Item> NewPost(
     val message = remember { mutableStateOf("") }
     val context = LocalContext.current
     val selectedItemPosition = remember { mutableStateOf(0) }
-
+    var eventType by remember { mutableStateOf(EventType.OFFLINE) }
+    var showEventTypeDialog by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     var selectedDate by remember {
@@ -152,7 +154,7 @@ fun <T : Item> NewPost(
                 attachment = photoUri?.toString()?.let { Attachment(it, "IMAGE") },
                 users = null,
                 participatedByMe = false,
-                type = EventType.OFFLINE,
+                type = eventType,
                 datetime = selectedDate,
                 speakerIds = emptyList(),
                 participantsIds = emptyList()
@@ -236,23 +238,42 @@ fun <T : Item> NewPost(
                     })
 
                 if (isEvent) {
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(end = 16.dp, top = 8.dp),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        Text(
-                            text = formatIsoDate(selectedDate),
-                            modifier = Modifier
-                                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
-                                .background(Color(0xFFF0F0F0), RoundedCornerShape(8.dp))
-                                .padding(horizontal = 8.dp, vertical = 4.dp),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.DarkGray,
-                            textAlign = TextAlign.Center
-                        )
+
+                       Column {  Text(
+                           text = formatIsoDate(selectedDate),
+                           modifier = Modifier
+                               .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                               .background(Color(0xFFF0F0F0), RoundedCornerShape(8.dp))
+                               .padding(horizontal = 8.dp, vertical = 4.dp),
+                           fontSize = 12.sp,
+                           fontWeight = FontWeight.Medium,
+                           color = Color.DarkGray,
+                           textAlign = TextAlign.Center
+                       )
+
+                           Text(
+                               text = eventType.name,
+                               modifier = Modifier
+                                   .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                                   .background(Color(0xFFF0F0F0), RoundedCornerShape(8.dp))
+                                   .padding(horizontal = 8.dp, vertical = 4.dp),
+                               fontSize = 12.sp,
+                               fontWeight = FontWeight.Medium,
+                               color = Color.DarkGray,
+                               textAlign = TextAlign.Center
+                           ) }
+
+
+
+
+
                     }
                 }
 
@@ -279,6 +300,26 @@ fun <T : Item> NewPost(
                         .padding(paddingValues)
                         .padding(16.dp)
                 ) {
+                    if(isEvent){
+                        SingleChoiceSegmentedButtonRow(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                            SegmentedButton(
+                                selected = eventType == EventType.OFFLINE,
+                                onClick = { eventType = EventType.OFFLINE },shape = MaterialTheme.shapes.small) {
+                                Text("Оффлайн")
+                            }
+
+                            SegmentedButton(
+                                selected = eventType == EventType.ONLINE,
+                                onClick = { eventType = EventType.ONLINE },shape = MaterialTheme.shapes.small) {
+                                Text("Онлайн")
+                            }
+                        }
+
+                    }
+
+
+
+
                     TextField(
                         value = message.value,
                         onValueChange = { text -> message.value = text },
@@ -391,6 +432,8 @@ fun <T : Item> NewPost(
 
 
                 }
+
+
             }
         }
 
