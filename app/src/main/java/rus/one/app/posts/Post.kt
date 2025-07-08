@@ -18,14 +18,14 @@ data class Post(
     override val published:  String,
     override val coords: Coords?,
     override val link: String?,
-    override val likeOwnerIds: List<Int>?,
+    override val likeOwnerIds: List<Long>?,
     override val likedByMe: Boolean,
     override val attachment: Attachment?,
     override val users: Map<String, User>?,
 
 
     val mentionedMe: Boolean,
-    val mentionIds: List<Int>?
+    val mentionIds: List<Long>?
 ): Item
 
 data class Coords(

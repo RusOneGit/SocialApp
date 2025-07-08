@@ -25,6 +25,8 @@ interface UserApiService {
         @Query("pass") pass: String,
     ): AuthResponse
 
+    @GET("/api/{id}/jobs")
+    suspend fun getJobs(@Path("id") id: Long): Response<List<Jobs>>
 
     @GET("/api/users")
     suspend fun getUsers(): Response<List<User>>

@@ -14,7 +14,7 @@ interface Item {
     val published: String
     val coords: Coords?
     val link: String?
-    val likeOwnerIds: List<Int>?
+    val likeOwnerIds: List<Long>?
     val likedByMe: Boolean
     val attachment: Attachment?
     val users: Map<String, User>?

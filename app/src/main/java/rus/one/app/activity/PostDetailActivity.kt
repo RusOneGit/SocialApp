@@ -139,18 +139,18 @@ fun UserList(post: Post, listName: String) {
             )
 
             val users: Map<String, User> = post.users ?: emptyMap()
-            val likeOwnerIds: List<Int> = post.likeOwnerIds ?: emptyList()
-            val mentionIds: List<Int> = post.mentionIds ?: emptyList()
+            val likeOwnerIds: List<Long> = post.likeOwnerIds ?: emptyList()
+            val mentionIds: List<Long> = post.mentionIds ?: emptyList()
 
             // В зависимости от listName выбираем нужный список id
-            val filteredUserIds: List<Int> = when (listName) {
+            val filteredUserIds: List<Long> = when (listName) {
                 "Likers" -> likeOwnerIds
                 "Mentioned" -> mentionIds
                 else -> emptyList()
             }
 
             // Фильтруем пользователей по выбранным id
-            val filteredUsers: List<User> = users.filterKeys { it.toInt() in filteredUserIds }.values.toList()
+            val filteredUsers: List<User> = users.filterKeys { it.toLong() in filteredUserIds }.values.toList()
 
             Text(
                 modifier = Modifier.padding(start = 4.dp, end = 16.dp),

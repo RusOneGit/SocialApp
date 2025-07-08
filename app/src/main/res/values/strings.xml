@@ -14,7 +14,8 @@
     <string name="posts">Posts</string>
     <string name="events">Events</string>
     <string name="users">Users</string>
-    <string name="add">Add_post</string>
+    <string name="add_post">Add_post</string>
+    <string name="add_event">Add_event</string>
     <string name="App_name">SocialActivity</string>
     <string name="profile">Profile</string>
     <string name="post_details">Post_Details</string>

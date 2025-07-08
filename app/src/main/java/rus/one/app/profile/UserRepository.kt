@@ -32,6 +32,7 @@ class UserRepository @Inject constructor(
 
     val userIdFlow: Flow<Long> = userPreferences.userIdFlow
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     val users: Flow<List<User>> = userDao.getAll()
         .map { list -> list.map { it.toDto() } }
@@ -100,4 +101,22 @@ class UserRepository @Inject constructor(
     suspend fun clearAuthData() {
         userPreferences.clearAuthData()
     }
+
+
+
+    suspend fun getJobs(userId: Long): List<Jobs> {
+        return try {
+            val response = userApiService.getJobs(userId) // Используем переданный userId
+            if (response.isSuccessful) {
+                response.body() ?: emptyList()
+            } else {
+                Log.e("UserRepository", "Error getting jobs: ${response.errorBody()?.string()}")
+                emptyList()
+            }
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Exception getting jobs: ${e.message}")
+            emptyList()
+        }
+    }
+
 }

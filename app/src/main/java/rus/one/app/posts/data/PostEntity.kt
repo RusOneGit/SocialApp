@@ -57,8 +57,8 @@
                 published = published,
                 coords = coordinates,
                 link = link,
-                mentionIds = mentionIds?.split(",")?.mapNotNull { it.toIntOrNull() },
-                likeOwnerIds = likeOwnerIds?.split(",")?.mapNotNull { it.toIntOrNull() },
+                mentionIds = mentionIds?.split(",")?.mapNotNull { it.toLongOrNull() },
+                likeOwnerIds = likeOwnerIds?.split(",")?.mapNotNull { it.toLongOrNull() },
                 mentionedMe = mentionedMe,
                 likedByMe = likedByMe,
                 attachment = attachmentObj, // Предполагаем, что это изображение

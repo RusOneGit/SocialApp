@@ -13,9 +13,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,6 +45,14 @@ class UserViewModel @Inject constructor(
     private val _authenticationState = MutableStateFlow<AuthenticationResult?>(null)
     val authenticationState: StateFlow<AuthenticationResult?> = _authenticationState.asStateFlow()
 
+
+    private val _jobs = MutableStateFlow<List<Jobs>>(emptyList())
+    val jobs: StateFlow<List<Jobs>> = _jobs.asStateFlow()
+    private val _jobsLoading = MutableStateFlow(false)
+    val jobsLoading: StateFlow<Boolean> = _jobsLoading.asStateFlow()
+
+    private val _jobsError = MutableStateFlow<String?>(null)
+    val jobsError: StateFlow<String?> = _jobsError.asStateFlow()
 
     fun registration(
         login: String,
@@ -121,6 +126,21 @@ class UserViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch {
             userRepository.clearAuthData()
+        }
+    }
+
+    fun loadJobs(userId: Long) {
+        viewModelScope.launch {
+            _jobsLoading.value = true
+            _jobsError.value = null
+            try {
+                val jobsList = userRepository.getJobs(userId)
+                _jobs.value = jobsList
+            } catch (e: Exception) {
+                _jobsError.value = "Ошибка загрузки работ: ${e.message}"
+            } finally {
+                _jobsLoading.value = false
+            }
         }
     }
 }

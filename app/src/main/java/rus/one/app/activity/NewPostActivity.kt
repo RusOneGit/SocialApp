@@ -9,6 +9,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,11 +24,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -66,6 +70,7 @@ import androidx.compose.ui.window.Popup
 import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import rus.one.app.R
+import rus.one.app.card.UserCard
 import rus.one.app.common.Item
 import rus.one.app.components.bar.BottomBarNewPost
 import rus.one.app.components.bar.TopBar
@@ -111,10 +116,10 @@ fun <T : Item> NewPost(
     val currentUserId by userViewModel.userId.collectAsState()
     val users by userViewModel.users.collectAsState(initial = emptyList())
     val user = users.find { it.id.toLong() == currentUserId }
-
+    var showUserSelectionDialog by remember { mutableStateOf(false) }
+    var selectedUsers by remember { mutableStateOf<List<Long>>(emptyList()) }
     var photoUri by remember { mutableStateOf<Uri?>(null) }
     var attachmentUri by remember { mutableStateOf<Uri?>(null) }
-    var selectedUsers by remember { mutableStateOf<List<String>>(emptyList()) }
     var coords by remember { mutableStateOf<Coords?>(null) }
     val pickImageLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
@@ -172,7 +177,7 @@ fun <T : Item> NewPost(
                 published = Clock.System.now().toString(),
                 coords = coords,
                 link = null,
-                mentionIds = null,
+                mentionIds = selectedUsers,
                 mentionedMe = false,
                 likeOwnerIds = emptyList(),
                 likedByMe = false,
@@ -186,7 +191,9 @@ fun <T : Item> NewPost(
 
 
     fun openUserSelection() {
-        // TODO: реализуйте выбор пользователей
+
+        showUserSelectionDialog = true
+
     }
 
     fun openLocationPicker() {
@@ -195,6 +202,78 @@ fun <T : Item> NewPost(
 
     BackHandler {
         onClose()
+    }
+
+    if (showUserSelectionDialog) {
+        Dialog(onDismissRequest = { showUserSelectionDialog = false }) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(500.dp)
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFFFEF7FF)
+                ),
+                border = BorderStroke(1.dp, color = Color(0xFFCAC4D0))
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = "Выберите пользователей",
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        color = Color(0xFF1D1B20),
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 20.sp
+                    )
+
+                    LazyColumn(modifier = Modifier.weight(1f)) {
+                        items(users.filter { it.id != currentUserId }) { user ->
+                            val isSelected = selectedUsers.contains(user.id)
+                            UserCard(
+                                user = user,
+                                isSelected = isSelected,
+                                onClick = {
+                                    selectedUsers = if (isSelected) {
+                                        selectedUsers - user.id
+                                    } else {
+                                        selectedUsers + user.id
+                                    }
+                                }
+                            )
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        TextButton(
+                            onClick = { showUserSelectionDialog = false },
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Text(
+                                text = "Отмена",
+                                color = Color(0xFF6750A4)
+                            )
+                        }
+                        TextButton(
+                            onClick = { showUserSelectionDialog = false
+
+                            }
+                        ) {
+                            Text(
+                                text = "Готово",
+                                color = Color(0xFF6750A4)
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     Dialog(onDismissRequest = onClose) {

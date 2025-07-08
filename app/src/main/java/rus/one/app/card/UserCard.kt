@@ -23,7 +23,9 @@ import rus.one.app.profile.User
 
 
 @Composable
-fun UserCard(user: User) {
+fun UserCard( user: User,
+              isSelected: Boolean = false, // Добавляем параметр выбора
+              onClick: () -> Unit = {}) {
 
 
     Card(
@@ -32,9 +34,9 @@ fun UserCard(user: User) {
             .padding(4.dp), // Общий отступ для карточки
 //        elevation = CardDefaults.cardElevation(8.dp),
         shape = RoundedCornerShape(12.dp),
-        onClick = {},
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFEF7FF)),
-        border = BorderStroke(1.dp, color = Color(0xFFCAC4D0))
+        onClick = onClick,
+        colors = CardDefaults.cardColors(containerColor = if (isSelected) Color(0xFFE8DEF8) else Color(0xFFFEF7FF) ),
+        border = BorderStroke(1.dp, color = if (isSelected) Color(0xFF6750A4) else Color(0xFFCAC4D0))
     ) {
         Row(
             modifier = Modifier

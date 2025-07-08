@@ -14,6 +14,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +41,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
+import rus.one.app.card.CardJob
 import rus.one.app.card.UserCard
 import rus.one.app.components.bar.BottomBarMain
 import rus.one.app.components.button.ProfileButton
@@ -46,6 +51,7 @@ import rus.one.app.navigation.rememberNavigationState
 import rus.one.app.posts.Post
 import rus.one.app.posts.PostScreen
 import rus.one.app.posts.ui.activity.NewPost
+import rus.one.app.profile.User
 import rus.one.app.profile.UserViewModel
 import rus.one.app.viewmodel.EventViewModel
 import rus.one.app.viewmodel.PostViewModel
@@ -100,8 +106,11 @@ fun MainScreen(
     val userState = userViewModel.users.collectAsState()
     val users = userState.value
 
+
     val expanded = remember { mutableStateOf(false) }
 
+    var selectedUser by remember { mutableStateOf<User?>(null) }
+    var showJobs by remember { mutableStateOf(false) }
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = {
             when (currentRoute) {
@@ -112,7 +121,11 @@ fun MainScreen(
         }) {
             Icon(
                 painter = painterResource(R.drawable.ic_add),
-                contentDescription = stringResource(R.string.add)
+                contentDescription = when (currentRoute) {
+                    NavigationItem.Events.screen.route -> stringResource(R.string.add_event)
+                    else -> stringResource(R.string.add_post)
+
+                }
             )
         }
     }, topBar = {
@@ -138,7 +151,7 @@ fun MainScreen(
                     paddingValues = paddingValues,
                     onClick = {
                             item ->
-                        val post = item as? Post ?: return@PostScreen
+                        val post = item
                         val intent = Intent(context, PostDetailActivity::class.java)
                         intent.putExtra("postId", post.id)
                         context.startActivity(intent)
@@ -159,7 +172,16 @@ fun MainScreen(
                     modifier = Modifier.padding(paddingValues)
                 ) {
                     items(users, key = { it.id }) { user ->
-                        UserCard(user)
+                        val isSelected = true
+                        UserCard(
+                            user = user,
+                            isSelected = !isSelected,
+                            onClick = {
+                                selectedUser = user
+                                showJobs = true
+                                userViewModel.loadJobs(user.id) // Загружаем работы при клике
+                            }
+                        )
 
                     }
                 }
@@ -182,10 +204,50 @@ fun MainScreen(
             }
         )
 
+
+    }
+
+
+
+
+
+
+    if (selectedUser != null && showJobs) {
+        val jobs = userViewModel.jobs.collectAsState().value
+        val isLoading = userViewModel.jobsLoading.collectAsState().value
+        val error = userViewModel.jobsError.collectAsState().value
+        AlertDialog(
+            onDismissRequest = {
+                selectedUser = null
+                showJobs = false
+            },
+            title = { Text("Работы ${selectedUser?.name}") },
+            text = {
+                when {
+                    isLoading -> CircularProgressIndicator()
+                    !error.isNullOrEmpty() -> Text(error)
+                    jobs.isEmpty() -> Text("Нет данных о работах")
+                    else -> LazyColumn() {
+                        items(jobs) { job ->
+                            CardJob(job)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    selectedUser = null
+                    showJobs = false
+                }) {
+                    Text("Закрыть")
+                }
+            }
+        )
+    }
+
         AuthMenu(userViewModel, expanded = expanded.value, onDismiss =  {expanded.value = false} ,context)
     }
 
-}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

@@ -46,7 +46,7 @@ data class EventEntity(
             published = published,
             coords = coordinates,
             link = link,
-            likeOwnerIds = likeOwnerIds?.split(",")?.mapNotNull { it.toIntOrNull() },
+            likeOwnerIds = likeOwnerIds?.split(",")?.mapNotNull { it.toLongOrNull() },
             likedByMe = likedByMe,
             attachment = attachment?.let { Attachment(it, "IMAGE") },
             users = usersMap,
