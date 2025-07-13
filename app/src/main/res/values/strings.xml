@@ -24,4 +24,5 @@
     <string name="attachment">Attachment</string>
     <string name="location">Location</string>
     <string name="post_image">Изображение поста</string>
+    <string name="newEvent">New Event</string>
 </resources>

@@ -11,6 +11,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,10 +24,14 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,10 +43,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import dagger.hilt.android.AndroidEntryPoint
 import rus.one.app.R
+import rus.one.app.card.CardItem
 import rus.one.app.card.CardJob
 import rus.one.app.card.UserCard
 import rus.one.app.components.bar.BottomBarMain
@@ -48,7 +56,6 @@ import rus.one.app.components.button.ProfileButton
 import rus.one.app.navigation.AppNavGraph
 import rus.one.app.navigation.NavigationItem
 import rus.one.app.navigation.rememberNavigationState
-import rus.one.app.posts.Post
 import rus.one.app.posts.PostScreen
 import rus.one.app.posts.ui.activity.NewPost
 import rus.one.app.profile.User
@@ -105,14 +112,17 @@ fun MainScreen(
 
     val userState = userViewModel.users.collectAsState()
     val users = userState.value
-
+    val feedState by postViewModel.feedState.collectAsState()
 
     val expanded = remember { mutableStateOf(false) }
 
     var selectedUser by remember { mutableStateOf<User?>(null) }
     var showJobs by remember { mutableStateOf(false) }
     Scaffold(floatingActionButton = {
-        FloatingActionButton(onClick = {
+        if (currentRoute == NavigationItem.Users.screen.route) {
+
+        } else {
+            FloatingActionButton(onClick = {
             when (currentRoute) {
                 NavigationItem.Posts.screen.route -> navigationState.navHostController.navigate("new_post")
                 NavigationItem.Events.screen.route -> navigationState.navHostController.navigate("new_event")
@@ -127,7 +137,9 @@ fun MainScreen(
 
                 }
             )
+            }
         }
+
     }, topBar = {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFEF7FF)),
@@ -168,21 +180,97 @@ fun MainScreen(
                 )
             },
             usersScreenContent = {
-                LazyColumn(
-                    modifier = Modifier.padding(paddingValues)
-                ) {
-                    items(users, key = { it.id }) { user ->
-                        val isSelected = true
-                        UserCard(
-                            user = user,
-                            isSelected = !isSelected,
-                            onClick = {
-                                selectedUser = user
-                                showJobs = true
-                                userViewModel.loadJobs(user.id) // Загружаем работы при клике
-                            }
-                        )
+                // Состояния выбранного пользователя и выбранной подвкладки
+                var selectedUser by remember { mutableStateOf<User?>(null) }
+                var selectedJobTabIndex by remember { mutableStateOf(0) }
+                val modalState = rememberModalBottomSheetState()
+                var showBottomSheet by remember { mutableStateOf(false) }
 
+                // Состояния из ViewModel
+                val jobs by userViewModel.jobs.collectAsState()
+                val isLoading by userViewModel.jobsLoading.collectAsState()
+                val error by userViewModel.jobsError.collectAsState()
+
+                Column(modifier = Modifier.padding(paddingValues)) {
+                    LazyColumn(modifier = Modifier.weight(1f)) {
+                        items(users, key = { it.id }) { user ->
+                            UserCard(
+                                user = user,
+                                isSelected = selectedUser?.id == user.id,
+                                onClick = {
+                                    selectedUser = user
+                                    selectedJobTabIndex = 0
+                                    showBottomSheet = true
+                                    userViewModel.loadJobs(user.id)
+                                }
+                            )
+                        }
+                    }
+                }
+
+                if (showBottomSheet && selectedUser != null) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheet = false },
+                        sheetState = modalState
+                    ) {
+                        Column {
+                            val jobTabs = listOf("Работы", "Посты")
+
+                            TabRow(selectedTabIndex = selectedJobTabIndex) {
+                                jobTabs.forEachIndexed { index, title ->
+                                    Tab(
+                                        selected = selectedJobTabIndex == index,
+                                        onClick = { selectedJobTabIndex = index },
+                                        text = { Text(title) }
+                                    )
+                                }
+                            }
+
+                            when (selectedJobTabIndex) {
+                                0 -> {
+                                    when {
+                                        isLoading -> CircularProgressIndicator(
+                                            modifier = Modifier.padding(
+                                                16.dp
+                                            )
+                                        )
+
+                                        !error.isNullOrEmpty() -> Text(
+                                            error ?: "",
+                                            modifier = Modifier.padding(16.dp)
+                                        )
+
+                                        jobs.isEmpty() -> Text(
+                                            "Нет данных о работах",
+                                            modifier = Modifier.padding(16.dp)
+                                        )
+
+                                        else -> LazyColumn(modifier = Modifier.heightIn(max = 300.dp)) {
+                                            items(jobs) { job ->
+                                                CardJob(job)
+                                            }
+                                        }
+                                    }
+                                }
+
+                                1 -> {
+
+                                    LazyColumn() {
+                                        items(feedState.item.filter { it.authorId == selectedUser?.id }) { item ->
+                                            CardItem(
+                                                viewModel = postViewModel,
+                                                item = item,
+                                                paddingValues = paddingValues,
+                                                onClick = {},
+                                                currentUserId = currentUserId
+                                            )
+
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -206,6 +294,8 @@ fun MainScreen(
 
 
     }
+
+
 
 
 

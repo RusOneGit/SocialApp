@@ -287,7 +287,7 @@ fun <T : Item> NewPost(
         ) {
             Scaffold(topBar = {
                 TopBar(
-                    title = stringResource(R.string.newPost),
+                    title = if(isEvent)stringResource(R.string.newEvent) else stringResource(R.string.newPost),
                     onBackClick = { onClose() },
                     onClick = {
                         savePostOrEvent()
